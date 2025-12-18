@@ -11,9 +11,9 @@ RESULTS_DIR="/home/$USER/cass-results"
 WORKLOAD_FILE="/tmp/cass-workload.in"
 BENCH_SYSTEMS=("ccl1.cyber.lab" "ccl2.cyber.lab" "ccl3.cyber.lab")
 TARGET_OPS="${TARGET_OPS:-0}"
-THREADCOUNT="${THREADCOUNT:-64}"
+THREADCOUNT="${THREADCOUNT:-256}"
 CPU_DEGRADES="${CPU_DEGRADES:-0,25,50,75}"
-WARMUP_WINDOWS="${WARMUP_WINDOWS:-1}"
+WARMUP_WINDOWS="${WARMUP_WINDOWS:-2}"
 MIN_OPS="${MIN_OPS:-100}"
 CPU_SETTLE_SEC="${CPU_SETTLE_SEC:-5}"
 SSH_USER="${SSH_USER:-$USER}"
@@ -21,6 +21,10 @@ SSH_OPTS=${SSH_OPTS:-"-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownH
 CASSANDRA_CONTAINER_PREFIX="${CASSANDRA_CONTAINER_PREFIX:-cassandra-node}"
 SUMMARY_SCRIPT="${SUMMARY_SCRIPT:-$BENCH_DIR_ABSOLUTE/tool/analysis/summary_stats.py}"
 DOCKER_CMD="${DOCKER_CMD:-docker}"
+LOCAL_VALUES_SCRIPT="${LOCAL_VALUES_SCRIPT:-./process_cass_values.py}"
+RECORDCOUNT="${RECORDCOUNT:-1000000}"
+LOADDURATION="${LOADDURATION:-120}"
+FIELD_LENGTH="${FIELD_LENGTH:-1024}"
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
@@ -74,6 +78,7 @@ done
 [ "${#CPU_STEPS[@]}" -eq 0 ] && CPU_STEPS=(0 25 50 75)
 
 CORE_COUNTS=()
+VALUES=()
 
 fetch_core_counts() {
     CORE_COUNTS=()
@@ -121,7 +126,7 @@ run_bench_for_pct() {
     local prefix="cassandra_cpu_${pct}"
     local run_dir="$RESULTS_DIR/cpu_${pct}"
 
-    ssh ${SSH_OPTS} "$SSH_USER@$BENCH_HOST" "BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' RESULTS_DIR='$RESULTS_DIR' WORKLOAD_FILE='$WORKLOAD_FILE' THREADCOUNT='$THREADCOUNT' TARGET_OPS='$TARGET_OPS' SYSTEMS_CSV='$SYSTEMS_CSV' PREFIX='$prefix' RUN_DIR='$run_dir' SUMMARY_SCRIPT='$SUMMARY_SCRIPT' WARMUP_WINDOWS='$WARMUP_WINDOWS' MIN_OPS='$MIN_OPS' bash -s" <<'EOF'
+    ssh ${SSH_OPTS} "$SSH_USER@$BENCH_HOST" "BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' RESULTS_DIR='$RESULTS_DIR' WORKLOAD_FILE='$WORKLOAD_FILE' THREADCOUNT='$THREADCOUNT' TARGET_OPS='$TARGET_OPS' SYSTEMS_CSV='$SYSTEMS_CSV' PREFIX='$prefix' RUN_DIR='$run_dir' SUMMARY_SCRIPT='$SUMMARY_SCRIPT' WARMUP_WINDOWS='$WARMUP_WINDOWS' MIN_OPS='$MIN_OPS' RECORDCOUNT='$RECORDCOUNT' LOADDURATION='$LOADDURATION' FIELD_LENGTH='$FIELD_LENGTH' bash -s" <<'EOF'
 set -euo pipefail
 
 rm -rf "$RUN_DIR" 2>/dev/null || true
@@ -129,10 +134,11 @@ mkdir -p "$RUN_DIR"
 
 cat > "$WORKLOAD_FILE" <<EOW
 workload=core
-recordcount=10000
+recordcount=$RECORDCOUNT
 operationcount=100000000
 readproportion=0.50
 updateproportion=0.50
+fieldlength=$FIELD_LENGTH
 cassandra.cluster=$SYSTEMS_CSV
 cassandra.hosts=$SYSTEMS_CSV
 cassandra.port=9042
@@ -145,7 +151,7 @@ cassandra.writeconsistencylevel=ONE
 threadcount=$THREADCOUNT
 target=$TARGET_OPS
 loadmode=duration
-loadduration=25
+loadduration=$LOADDURATION
 measurement.type=raw
 csvfilename=$PREFIX
 EOW
@@ -172,12 +178,104 @@ for pct in "${CPU_STEPS_ARR[@]}"; do
     # Log out the args for debug
     echo "Aggregating for CPU slowdown ${pct}%"
     python3 "$BENCH_DIR_ABSOLUTE/tool/analysis/summary_stats.py" -p "cassandra_cpu_${pct}" -f "$RESULTS_DIR/cpu_${pct}/" -w 1
-    # Rename from weird name
-    mv "cass_cpu_${pct}"* "cass_cpu_${pct}_summary.csv"
+    mv "${RESULTS_DIR}/cassandra_cpu_${pct}_1_sumstat.csv" "${RESULTS_DIR}/cassandra_cpu_${pct}_summary.csv"
 done
 
 popd >/dev/null
 EOF
+}
+
+proc_values() {
+    local raw
+    raw=$(ssh ${SSH_OPTS} "$SSH_USER@$BENCH_HOST" "RESULTS_DIR='$RESULTS_DIR' CPU_STEPS='${CPU_STEPS[*]}' bash -s" <<'EOF'
+set -euo pipefail
+IFS=' ' read -r -a CPU_STEPS_ARR <<< "${CPU_STEPS:-}"
+
+for pct in "${CPU_STEPS_ARR[@]}"; do
+    file="${RESULTS_DIR}/cassandra_cpu_${pct}_summary.csv"
+    if [ ! -f "$file" ]; then
+        echo "${pct},N/A,N/A"
+        continue
+    fi
+
+    python3 - "$file" "$pct" <<'PY'
+import csv
+import math
+import sys
+
+path, pct = sys.argv[1], sys.argv[2]
+
+def mean(vals):
+    return sum(vals) / len(vals) if vals else None
+
+def fmt(val):
+    if val is None or (isinstance(val, float) and (math.isnan(val) or math.isinf(val))):
+        return "N/A"
+    return f"{val:.2f}"
+
+throughputs = []
+latencies = []
+
+try:
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            for t_key in ("Throughput", "OpPS"):
+                v = row.get(t_key)
+                if v is None:
+                    continue
+                try:
+                    throughputs.append(float(v))
+                    break
+                except (TypeError, ValueError):
+                    continue
+            for l_key in ("Mean", "AverageLatency", "AvgLatency", "Latency"):
+                v = row.get(l_key)
+                if v is None:
+                    continue
+                try:
+                    latencies.append(float(v))
+                    break
+                except (TypeError, ValueError):
+                    continue
+except OSError as exc:
+    sys.stderr.write(f"Failed to read {path}: {exc}\n")
+
+thr = mean(throughputs)
+lat = mean(latencies)
+print(f"{pct},{fmt(thr)},{fmt(lat)}")
+PY
+done
+EOF
+) || return
+
+    VALUES=()
+    while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        VALUES+=("$line")
+    done <<< "$raw"
+}
+
+run_local_values_script() {
+    if [ "${#VALUES[@]}" -eq 0 ]; then
+        log "No VALUES collected; skipping local processor"
+        return
+    fi
+
+    if [ -z "${LOCAL_VALUES_SCRIPT:-}" ]; then
+        log "LOCAL_VALUES_SCRIPT not set; skipping local processor"
+        return
+    fi
+
+    if [ ! -f "$LOCAL_VALUES_SCRIPT" ]; then
+        log "Local values script not found at $LOCAL_VALUES_SCRIPT; skipping"
+        return
+    fi
+
+    log "Running local values processor on ${#VALUES[@]} points via $LOCAL_VALUES_SCRIPT"
+    if ! python3 "$LOCAL_VALUES_SCRIPT" "${VALUES[@]}"; then
+        log "Local values processor failed"
+    fi
 }
 
 for pct in "${CPU_STEPS[@]}"; do
@@ -195,3 +293,11 @@ restore_cpu_limits
 
 log "Aggregating results"
 agg_results
+
+log "Processing final throughput/latency values"
+proc_values
+if [ "${#VALUES[@]}" -gt 0 ]; then
+    log "Collected data points (cpu%,avg_throughput,avg_latency): ${VALUES[*]}"
+fi
+
+run_local_values_script
