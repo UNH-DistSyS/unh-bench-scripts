@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Process Cassandra bench data points passed in as CLI arguments and plot them.
 
-Each argument must look like: cpu_pct,avg_throughput,avg_latency
-Example: 0,100000.0,620.0 25,82000.0,640.0
+Each argument must look like: cpu_pct,avg_throughput,avg_latency[,label]
+Example: 0,100000.0,620.0,8_cores 25,82000.0,640.0,6_cores
 
 Outputs a CSV table to stdout by default, can also write JSON, and produces
-a bar chart (normalized to the highest throughput = 100%) unless disabled.
+normalized throughput, raw throughput, and raw latency plots unless disabled.
 """
 
 import argparse
@@ -17,8 +17,8 @@ from typing import List, Optional, Dict, Any
 
 def parse_point(text: str) -> Dict[str, Optional[float]]:
     parts = text.split(",")
-    if len(parts) != 3:
-        raise ValueError(f"Bad point '{text}': expected cpu,throughput,latency")
+    if len(parts) not in (3, 4):
+        raise ValueError(f"Bad point '{text}': expected cpu,throughput,latency[,label]")
 
     def parse_num(val: str) -> Optional[float]:
         val = val.strip()
@@ -32,24 +32,42 @@ def parse_point(text: str) -> Dict[str, Optional[float]]:
     cpu = parse_num(parts[0])
     thr = parse_num(parts[1])
     lat = parse_num(parts[2])
-    return {"cpu_pct": cpu, "throughput": thr, "latency": lat}
+    label = None
+    if len(parts) == 4:
+        label = parts[3].strip() or None
+    return {"cpu_pct": cpu, "throughput": thr, "latency": lat, "label": label}
 
 
 def add_normalized(points: List[Dict[str, Optional[float]]]) -> None:
     max_thr = None
+    min_lat = None
     for pt in points:
         thr = pt.get("throughput")
+        lat = pt.get("latency")
         if thr is None:
-            continue
-        if max_thr is None or thr > max_thr:
+            pass
+        elif max_thr is None or thr > max_thr:
             max_thr = thr
+        if lat is None:
+            continue
+        if min_lat is None or lat < min_lat:
+            min_lat = lat
 
     for pt in points:
         thr = pt.get("throughput")
+        lat = pt.get("latency")
         if max_thr and thr is not None:
             pt["normalized_throughput"] = thr / max_thr
+            pt["throughput_slowdown_pct"] = (1.0 - (thr / max_thr)) * 100.0
         else:
             pt["normalized_throughput"] = None
+            pt["throughput_slowdown_pct"] = None
+        if min_lat and lat is not None:
+            pt["normalized_latency"] = lat / min_lat
+            pt["latency_increase_pct"] = ((lat / min_lat) - 1.0) * 100.0
+        else:
+            pt["normalized_latency"] = None
+            pt["latency_increase_pct"] = None
 
 
 def write_csv(points: List[Dict[str, Optional[float]]], fh) -> None:
@@ -90,29 +108,48 @@ def print_table(points: List[Dict[str, Optional[float]]]) -> None:
         print(fmt.format(cpu_avail, thr, lat, norm))
 
 
-def plot(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
+def _load_matplotlib():
     try:
         import matplotlib
 
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
+        return plt
     except Exception as exc:
         sys.stderr.write(f"Plotting skipped (matplotlib unavailable): {exc}\n")
-        return False
+        return None
 
-    # Sort by CPU availability (descending) for a natural left-to-right view.
+
+def _sort_points(points: List[Dict[str, Optional[float]]]) -> List[Dict[str, Optional[float]]]:
     def sort_key(pt):
         return pt["cpu_pct"] if pt["cpu_pct"] is not None else 999
 
-    pts_sorted = sorted(points, key=sort_key)
+    return sorted(points, key=sort_key)
 
+
+def _labels_for_points(points: List[Dict[str, Optional[float]]]) -> List[str]:
     labels = []
-    heights = []
-    for pt in pts_sorted:
-        if pt["cpu_pct"] is None:
+    for pt in points:
+        label = pt.get("label")
+        if label:
+            labels.append(str(label))
+        elif pt["cpu_pct"] is None:
             labels.append("?")
         else:
-            labels.append(f"{100 - pt['cpu_pct']:.0f}%")
+            labels.append(f"{pt['cpu_pct']:.0f}%")
+    return labels
+
+
+def plot_normalized(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
+    plt = _load_matplotlib()
+    if plt is None:
+        return False
+
+    pts_sorted = _sort_points(points)
+    labels = _labels_for_points(pts_sorted)
+
+    heights = []
+    for pt in pts_sorted:
         norm = pt.get("normalized_throughput")
         heights.append(0 if norm is None else norm * 100.0)
 
@@ -120,11 +157,11 @@ def plot(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
         return False
 
     plt.figure(figsize=(8, 5))
-    bars = plt.bar(labels, heights, color="steelblue")
-    plt.xlabel("CPU availability (100% - slowdown)")
+    bars = plt.bar(labels, heights, color="#2f6f9f")
+    plt.xlabel("Slowdown (%)")
     plt.ylabel("Normalized throughput (max = 100%)")
     plt.ylim(0, max(heights + [100]) * 1.1)
-    plt.title("Cassandra throughput vs CPU slowdown")
+    plt.title("Cassandra Normalized Throughput vs Slowdown")
     plt.grid(axis="y", linestyle="--", alpha=0.6)
 
     for bar, height in zip(bars, heights):
@@ -135,6 +172,126 @@ def plot(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
             label = f"{height:.1f}%"
             y = height + max(2, 0.01 * height)
         plt.text(bar.get_x() + bar.get_width() / 2, y, label, ha="center", va="bottom", fontsize=8)
+
+    try:
+        plt.tight_layout()
+        plt.savefig(out_path, bbox_inches="tight")
+        sys.stdout.write(f"Wrote plot to {out_path}\n")
+        return True
+    finally:
+        plt.close("all")
+
+
+def _plot_series(
+    points: List[Dict[str, Optional[float]]],
+    y_key: str,
+    y_label: str,
+    title: str,
+    out_path: str,
+    color: str,
+) -> bool:
+    plt = _load_matplotlib()
+    if plt is None:
+        return False
+
+    pts_sorted = _sort_points(points)
+    labels = _labels_for_points(pts_sorted)
+    values = []
+    for pt in pts_sorted:
+        val = pt.get(y_key)
+        values.append(None if val is None else float(val))
+
+    if not labels:
+        return False
+
+    xs = list(range(len(labels)))
+    ys = [0.0 if v is None else v for v in values]
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(xs, ys, marker="o", linewidth=2.0, markersize=5.5, color=color)
+    plt.fill_between(xs, ys, [0] * len(ys), color=color, alpha=0.15)
+    plt.xticks(xs, labels)
+    plt.xlabel("Slowdown (%)")
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.grid(axis="y", linestyle="--", alpha=0.6)
+
+    y_max = max(ys) if ys else 0.0
+    y_pad = max(1.0, y_max * 0.03)
+    for x, val in zip(xs, values):
+        if val is None:
+            label = "n/a"
+            y = y_pad
+        else:
+            label = f"{val:.1f}"
+            y = val + y_pad
+        plt.text(x, y, label, ha="center", va="bottom", fontsize=8)
+
+    try:
+        plt.tight_layout()
+        plt.savefig(out_path, bbox_inches="tight")
+        sys.stdout.write(f"Wrote plot to {out_path}\n")
+        return True
+    finally:
+        plt.close("all")
+
+
+def plot_throughput(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
+    return _plot_series(
+        points=points,
+        y_key="throughput",
+        y_label="Throughput (ops/s)",
+        title="Cassandra Throughput vs Slowdown",
+        out_path=out_path,
+        color="#2a9d8f",
+    )
+
+
+def plot_latency(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
+    return _plot_series(
+        points=points,
+        y_key="latency",
+        y_label="Latency (microseconds)",
+        title="Cassandra Latency vs Slowdown",
+        out_path=out_path,
+        color="#d97706",
+    )
+
+
+def plot_relative(points: List[Dict[str, Optional[float]]], out_path: str) -> bool:
+    plt = _load_matplotlib()
+    if plt is None:
+        return False
+
+    pts_sorted = _sort_points(points)
+    labels = _labels_for_points(pts_sorted)
+    thr_vals = []
+    lat_vals = []
+    for pt in pts_sorted:
+        t = pt.get("throughput_slowdown_pct")
+        l = pt.get("latency_increase_pct")
+        thr_vals.append(0.0 if t is None else float(t))
+        lat_vals.append(0.0 if l is None else float(l))
+
+    if not labels:
+        return False
+
+    xs = list(range(len(labels)))
+    width = 0.38
+    plt.figure(figsize=(10, 5))
+    bars_thr = plt.bar([x - width / 2 for x in xs], thr_vals, width=width, color="#2563eb", label="Throughput slowdown %")
+    bars_lat = plt.bar([x + width / 2 for x in xs], lat_vals, width=width, color="#ea580c", label="Latency increase %")
+    plt.xticks(xs, labels)
+    plt.xlabel("Slowdown setting")
+    plt.ylabel("Relative change (%)")
+    plt.title("Cassandra Relative Slowdown (Throughput + Latency)")
+    plt.grid(axis="y", linestyle="--", alpha=0.6)
+    plt.legend(loc="upper left")
+
+    for bars, vals in ((bars_thr, thr_vals), (bars_lat, lat_vals)):
+        for bar, val in zip(bars, vals):
+            y = val + max(1.0, val * 0.02)
+            plt.text(bar.get_x() + bar.get_width() / 2, y, f"{val:.1f}%", ha="center", va="bottom", fontsize=8)
 
     try:
         plt.tight_layout()
@@ -165,7 +322,22 @@ def main(argv: List[str]) -> int:
     parser.add_argument(
         "--plot-out",
         default="cass_normalized_throughput.png",
-        help="Path to write bar plot (default: cass_normalized_throughput.png)",
+        help="Path to write normalized throughput plot (default: cass_normalized_throughput.png)",
+    )
+    parser.add_argument(
+        "--throughput-plot-out",
+        default="cass_throughput_vs_slowdown.png",
+        help="Path to write raw throughput plot (default: cass_throughput_vs_slowdown.png)",
+    )
+    parser.add_argument(
+        "--relative-plot-out",
+        default="cass_relative_slowdown.png",
+        help="Path to write relative throughput/latency slowdown bars (default: cass_relative_slowdown.png)",
+    )
+    parser.add_argument(
+        "--latency-plot-out",
+        default="cass_latency_vs_slowdown.png",
+        help="Path to write raw latency plot (default: cass_latency_vs_slowdown.png)",
     )
     parser.add_argument(
         "--no-plot",
@@ -200,8 +372,15 @@ def main(argv: List[str]) -> int:
     else:  # table
         print_table(points)
 
-    if not args.no_plot and args.plot_out:
-        plot(points, args.plot_out)
+    if not args.no_plot:
+        if args.plot_out:
+            plot_normalized(points, args.plot_out)
+        if args.relative_plot_out:
+            plot_relative(points, args.relative_plot_out)
+        if args.throughput_plot_out:
+            plot_throughput(points, args.throughput_plot_out)
+        if args.latency_plot_out:
+            plot_latency(points, args.latency_plot_out)
 
     return 0
 
