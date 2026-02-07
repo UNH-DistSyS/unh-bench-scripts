@@ -14,18 +14,20 @@ SLOWDOWN_VALUE="${SLOWDOWN_VALUE:-${CONTAINER_CORES:-4}}"
 CONTAINER_CORES="${CONTAINER_CORES:-$SLOWDOWN_VALUE}"
 DEFAULT_CORES="${DEFAULT_CORES:-8}"
 DEFAULT_BANDWIDTH_MBIT="${DEFAULT_BANDWIDTH_MBIT:-1000}"
+DEFAULT_LATENCY_MS="${DEFAULT_LATENCY_MS:-0ms}"
 DEFAULT_MEMORY_MB="${DEFAULT_MEMORY_MB:-49152}"
+CASS_CONNECTIONS="${CASS_CONNECTIONS:-8}"
 SLOWDOWN_NODES_CSV="${SLOWDOWN_NODES_CSV:-}"
 CASS_KEYSPACE="${CASS_KEYSPACE:-ycsb}"
 CASS_TABLE="${CASS_TABLE:-usertable}"
 CASS_LOCAL_DC="${CASS_LOCAL_DC:-datacenter1}"
-CLIENT_TYPE="${CLIENT_TYPE:-closedloop}"
+CLIENT_TYPE="${CLIENT_TYPE:-hybrid}"
 SILENCE="${SILENCE:-true}"
 WORKLOAD_TARGET="${WORKLOAD_TARGET:-512000}"
 THREAD_COUNT="${THREAD_COUNT:-512}"
-RUN_DURATION="${RUN_DURATION:-60}"
-RECORD_COUNT="${RECORD_COUNT:-1000000}"
-OPERATION_COUNT="${OPERATION_COUNT:-10000000}"
+RUN_DURATION="${RUN_DURATION:-30}"
+RECORD_COUNT="${RECORD_COUNT:-200000}"
+OPERATION_COUNT="${OPERATION_COUNT:-2000000}"
 
 SLOWDOWN_NODES=()
 if [[ -n "$SLOWDOWN_NODES_CSV" ]]; then
@@ -105,7 +107,7 @@ apply_bandwidth_restraints() {
     local container_name="$3"
     local iface=""
 
-    iface="$(ssh ${SSH_OPTS} "$BENCH_USER@$host" "ip -o -4 route show to default | sed -n 's/.* dev \\([^ ]*\\).*/\\1/p' | head -n1" 2>/dev/null)"
+    iface="$(default_interface_for_host "$host")"
     if [[ -z "$iface" ]]; then
         log "ERROR: Could not determine default network interface on $host for $container_name"
         exit 1
@@ -122,13 +124,61 @@ remove_bandwidth_restraints() {
     local container_name="$2"
     local iface=""
 
-    iface="$(ssh ${SSH_OPTS} "$BENCH_USER@$host" "ip -o -4 route show to default | sed -n 's/.* dev \\([^ ]*\\).*/\\1/p' | head -n1" 2>/dev/null)"
+    iface="$(default_interface_for_host "$host")"
     if [[ -z "$iface" ]]; then
         log "WARNING: Could not determine default network interface on $host while removing bandwidth restraint for $container_name"
         return
     fi
 
     log "Removing bandwidth restraint on $host ($container_name) from interface $iface"
+    ssh ${SSH_OPTS} "$BENCH_USER@$host" "sudo tc qdisc del dev \"$iface\" root >/dev/null 2>&1 || true" >/dev/null 2>&1
+}
+
+default_interface_for_host() {
+    local host="$1"
+    ssh ${SSH_OPTS} "$BENCH_USER@$host" "ip -o -4 route show to default | sed -n 's/.* dev \\([^ ]*\\).*/\\1/p' | head -n1" 2>/dev/null
+}
+
+latency_is_zero() {
+    local val="$1"
+    [[ "$val" =~ ^0+([a-zA-Z]+)?$ ]]
+}
+
+apply_latency_restraints() {
+    local host="$1"
+    local target_latency_ms="$2"
+    local container_name="$3"
+    local iface=""
+
+    iface="$(default_interface_for_host "$host")"
+    if [[ -z "$iface" ]]; then
+        log "ERROR: Could not determine default network interface on $host for $container_name"
+        exit 1
+    fi
+
+    if latency_is_zero "$target_latency_ms"; then
+        log "Clearing latency restraint on $host ($container_name) for interface $iface"
+        ssh ${SSH_OPTS} "$BENCH_USER@$host" "sudo tc qdisc del dev \"$iface\" root >/dev/null 2>&1 || true" >/dev/null 2>&1
+        return
+    fi
+
+    log "Applying latency restraint on $host ($container_name): ${target_latency_ms} on interface $iface"
+    ssh ${SSH_OPTS} "$BENCH_USER@$host" \
+        "sudo tc qdisc replace dev \"$iface\" root netem delay ${target_latency_ms}" >/dev/null 2>&1
+}
+
+remove_latency_restraints() {
+    local host="$1"
+    local container_name="$2"
+    local iface=""
+
+    iface="$(default_interface_for_host "$host")"
+    if [[ -z "$iface" ]]; then
+        log "WARNING: Could not determine default network interface on $host while removing latency restraint for $container_name"
+        return
+    fi
+
+    log "Removing latency restraint on $host ($container_name) from interface $iface"
     ssh ${SSH_OPTS} "$BENCH_USER@$host" "sudo tc qdisc del dev \"$iface\" root >/dev/null 2>&1 || true" >/dev/null 2>&1
 }
 
@@ -192,9 +242,10 @@ default_step_value() {
     case "$SLOWDOWN_TYPE" in
         cpu) echo "$DEFAULT_CORES" ;;
         network) echo "$DEFAULT_BANDWIDTH_MBIT" ;;
+        latency) echo "$DEFAULT_LATENCY_MS" ;;
         memory) echo "$DEFAULT_MEMORY_MB" ;;
         *)
-            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu or memory)"
+            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu, network, latency, or memory)"
             exit 1
             ;;
     esac
@@ -208,9 +259,10 @@ apply_resource_restraints() {
     case "$SLOWDOWN_TYPE" in
         cpu) apply_core_restraints "$host" "$value" "$container_name" ;;
         network) apply_bandwidth_restraints "$host" "$value" "$container_name" ;;
+        latency) apply_latency_restraints "$host" "$value" "$container_name" ;;
         memory) apply_memory_restraints "$host" "$value" "$container_name" ;;
         *)
-            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu or memory)"
+            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu, network, latency, or memory)"
             exit 1
             ;;
     esac
@@ -223,9 +275,10 @@ remove_resource_restraints() {
     case "$SLOWDOWN_TYPE" in
         cpu) remove_core_restraints "$host" "$container_name" ;;
         network) remove_bandwidth_restraints "$host" "$container_name" ;;
+        latency) remove_latency_restraints "$host" "$container_name" ;;
         memory) remove_memory_restraints "$host" "$container_name" ;;
         *)
-            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu or memory)"
+            log "ERROR: Unsupported SLOWDOWN_TYPE '$SLOWDOWN_TYPE' (expected: cpu, network, latency, or memory)"
             exit 1
             ;;
     esac
@@ -237,7 +290,7 @@ run_experiment() {
     local systems_list
     systems_list="$(make_systems_list)"
     ssh ${SSH_OPTS} "$BENCH_USER@$BENCH_HOST" \
-        "CASS_BENCH_DIR_ABSOLUTE=\"$BENCH_DIR_ABSOLUTE\" CASS_SYSTEMS_LIST=\"$systems_list\" CASS_RESULTS_DIR=\"$results_dir\" CASS_PREFIX=\"$prefix\" CASS_KEYSPACE=\"$CASS_KEYSPACE\" CASS_TABLE=\"$CASS_TABLE\" CASS_LOCAL_DC=\"$CASS_LOCAL_DC\" CASS_CLIENT_TYPE=\"$CLIENT_TYPE\" CASS_SILENCE=\"$SILENCE\" CASS_WORKLOAD_TARGET=\"$WORKLOAD_TARGET\" CASS_THREAD_COUNT=\"$THREAD_COUNT\" CASS_RUN_DURATION=\"$RUN_DURATION\" CASS_RECORD_COUNT=\"$RECORD_COUNT\" CASS_OPERATION_COUNT=\"$OPERATION_COUNT\" bash -s" <<'EOF'
+        "CASS_BENCH_DIR_ABSOLUTE=\"$BENCH_DIR_ABSOLUTE\" CASS_SYSTEMS_LIST=\"$systems_list\" CASS_RESULTS_DIR=\"$results_dir\" CASS_PREFIX=\"$prefix\" CASS_KEYSPACE=\"$CASS_KEYSPACE\" CASS_TABLE=\"$CASS_TABLE\" CASS_LOCAL_DC=\"$CASS_LOCAL_DC\" CASS_CLIENT_TYPE=\"$CLIENT_TYPE\" CASS_SILENCE=\"$SILENCE\" CASS_WORKLOAD_TARGET=\"$WORKLOAD_TARGET\" CASS_THREAD_COUNT=\"$THREAD_COUNT\" CASS_RUN_DURATION=\"$RUN_DURATION\" CASS_RECORD_COUNT=\"$RECORD_COUNT\" CASS_OPERATION_COUNT=\"$OPERATION_COUNT\" CASS_CONNECTIONS=\"$CASS_CONNECTIONS\" bash -s" <<'EOF'
 
 set -euo pipefail
 
@@ -256,6 +309,7 @@ cassandra.table=$CASS_TABLE
 cassandra.localdatacenter=$CASS_LOCAL_DC
 cassandra.readconsistencylevel=ONE
 cassandra.writeconsistencylevel=ONE
+cassandra.connections=$CASS_CONNECTIONS
 table=$CASS_TABLE
 threadcount=$CASS_THREAD_COUNT
 target=$CASS_WORKLOAD_TARGET

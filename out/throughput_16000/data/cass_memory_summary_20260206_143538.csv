@@ -1,0 +1,5 @@
+slowdown_type,step_value,slowdown_pct,trials,throughput_avg,throughput_stddev,latency_avg,latency_stddev
+memory,49152,0.00,1,15864.7049,0.0000,13446.6079,0.0000
+memory,36864,25.00,1,15864.7049,0.0000,11360.5064,0.0000
+memory,24576,50.00,1,15864.8033,0.0000,12269.5260,0.0000
+memory,12288,75.00,1,15864.8525,0.0000,8772.4845,0.0000

@@ -1,0 +1,5 @@
+slowdown_type,step_value,slowdown_pct,trial,throughput,latency
+cpu,8,0.00,1,15864.6721,12180.2883
+cpu,6,25.00,1,15864.6557,4560.1537
+cpu,4,50.00,1,15864.8525,11333.2340
+cpu,2,75.00,1,16685.2586,281074.3569

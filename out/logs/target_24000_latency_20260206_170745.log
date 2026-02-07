@@ -1,0 +1,252 @@
+[2026-02-06 17:07:46] Bench host ccl4.cyber.lab has 32 CPUs; using THREAD_COUNT=1024, WORKLOAD_TARGET=24000
+[2026-02-06 17:07:46] Slowdown type: latency
+[2026-02-06 17:07:46] Baseline value on non-slowdown nodes: 0ms
+[2026-02-06 17:07:46] Steps to test: 10us 100us 1ms 10ms
+[2026-02-06 17:07:46] Trials per step: 1
+[2026-02-06 17:07:46] Max attempts per trial: 5
+[2026-02-06 17:07:46] ===============================================
+[2026-02-06 17:07:46] Starting latency experiment for step value 10us (slowdown=0.10%)
+[2026-02-06 17:07:46] ===============================================
+[2026-02-06 17:07:46] ---- Trial 1/1 for step 10us ----
+[2026-02-06 17:07:46] Trial 1 attempt 1/5
+[2026-02-06 17:07:46] Bringing up a fresh cluster...
+[2026-02-06 17:07:46] Action: up
+[2026-02-06 17:07:46] SSH user: egp1042
+[2026-02-06 17:07:46] Docker command: docker
+[2026-02-06 17:07:46] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:07:46] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:07:47] Teardown complete.
+[2026-02-06 17:07:47] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:07:47] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 17:07:47] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:08:51] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:08:51] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 17:08:52] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 17:08:52] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 17:08:52] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:10:09] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:10:09] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 17:10:10] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 17:10:10] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 17:10:11] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:11:27] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:11:27] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 17:11:28] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 17:11:28] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:11:28] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:11:33] Waiting for schema agreement on all nodes
+[2026-02-06 17:11:37] Schema agreement reached on all nodes
+[2026-02-06 17:11:37] Cluster is up. Running trial with value 10us...
+[2026-02-06 17:13:27] Experiment output for step 10us, trial 1:
+[2026-02-06 17:13:27] [2026-02-06 17:11:37] Applying latency restraint on ccl1.cyber.lab (cassandra-node-1): 10us on interface ens18
+[2026-02-06 17:11:38] Clearing latency restraint on ccl2.cyber.lab (cassandra-node-2) for interface ens18
+[2026-02-06 17:11:38] Clearing latency restraint on ccl3.cyber.lab (cassandra-node-3) for interface ens18
+[2026-02-06 17:11:39] Waiting for Cassandra containers to accept CQL after latency update
+[2026-02-06 17:11:39] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:11:40] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:11:41] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:11:41] Starting load phase
+[2026-02-06 17:12:00] Load phase complete
+[2026-02-06 17:12:00] Starting run phase
+[2026-02-06 17:13:04] Run phase complete
+[2026-02-06 17:13:04] UNHBench logs: /home/egp1042/cass-results/latency_10us/cassandra_latency_10us_load.log /home/egp1042/cass-results/latency_10us/cassandra_latency_10us_run.log
+[2026-02-06 17:13:04] Processing results in /home/egp1042/cass-results/latency_10us
+RESULTS:10us,23990.4262,60118.4467
+[2026-02-06 17:13:26] Removing latency restraint on ccl1.cyber.lab (cassandra-node-1) from interface ens18
+[2026-02-06 17:13:26] Removing latency restraint on ccl2.cyber.lab (cassandra-node-2) from interface ens18
+[2026-02-06 17:13:27] Removing latency restraint on ccl3.cyber.lab (cassandra-node-3) from interface ens18
+[2026-02-06 17:13:27] Recorded trial 1/1: throughput=23990.4262, latency=60118.4467
+[2026-02-06 17:13:27] Tearing down cluster after trial 1...
+[2026-02-06 17:13:27] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:13:33] Teardown complete.
+[2026-02-06 17:13:33] Completed step 10us: throughput_avg=23990.4262 (stddev=0.0000), latency_avg=60118.4467 (stddev=0.0000)
+[2026-02-06 17:13:33] ===============================================
+[2026-02-06 17:13:33] Starting latency experiment for step value 100us (slowdown=1.00%)
+[2026-02-06 17:13:33] ===============================================
+[2026-02-06 17:13:33] ---- Trial 1/1 for step 100us ----
+[2026-02-06 17:13:33] Trial 1 attempt 1/5
+[2026-02-06 17:13:33] Bringing up a fresh cluster...
+[2026-02-06 17:13:33] Action: up
+[2026-02-06 17:13:33] SSH user: egp1042
+[2026-02-06 17:13:33] Docker command: docker
+[2026-02-06 17:13:33] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:13:33] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:13:34] Teardown complete.
+[2026-02-06 17:13:34] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:13:34] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 17:13:34] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:14:38] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:14:38] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 17:14:39] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 17:14:39] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 17:14:39] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:15:56] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:15:56] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 17:15:57] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 17:15:57] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 17:15:58] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:17:16] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:17:16] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 17:17:17] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 17:17:17] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:17:17] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:17:21] Waiting for schema agreement on all nodes
+[2026-02-06 17:17:26] Schema agreement reached on all nodes
+[2026-02-06 17:17:26] Cluster is up. Running trial with value 100us...
+[2026-02-06 17:19:16] Experiment output for step 100us, trial 1:
+[2026-02-06 17:19:16] [2026-02-06 17:17:26] Applying latency restraint on ccl1.cyber.lab (cassandra-node-1): 100us on interface ens18
+[2026-02-06 17:17:27] Clearing latency restraint on ccl2.cyber.lab (cassandra-node-2) for interface ens18
+[2026-02-06 17:17:27] Clearing latency restraint on ccl3.cyber.lab (cassandra-node-3) for interface ens18
+[2026-02-06 17:17:27] Waiting for Cassandra containers to accept CQL after latency update
+[2026-02-06 17:17:28] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:17:29] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:17:30] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:17:30] Starting load phase
+[2026-02-06 17:17:49] Load phase complete
+[2026-02-06 17:17:49] Starting run phase
+[2026-02-06 17:18:53] Run phase complete
+[2026-02-06 17:18:53] UNHBench logs: /home/egp1042/cass-results/latency_100us/cassandra_latency_100us_load.log /home/egp1042/cass-results/latency_100us/cassandra_latency_100us_run.log
+[2026-02-06 17:18:53] Processing results in /home/egp1042/cass-results/latency_100us
+RESULTS:100us,23990.5738,45509.1091
+[2026-02-06 17:19:15] Removing latency restraint on ccl1.cyber.lab (cassandra-node-1) from interface ens18
+[2026-02-06 17:19:15] Removing latency restraint on ccl2.cyber.lab (cassandra-node-2) from interface ens18
+[2026-02-06 17:19:16] Removing latency restraint on ccl3.cyber.lab (cassandra-node-3) from interface ens18
+[2026-02-06 17:19:16] Recorded trial 1/1: throughput=23990.5738, latency=45509.1091
+[2026-02-06 17:19:16] Tearing down cluster after trial 1...
+[2026-02-06 17:19:16] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:19:22] Teardown complete.
+[2026-02-06 17:19:22] Completed step 100us: throughput_avg=23990.5738 (stddev=0.0000), latency_avg=45509.1091 (stddev=0.0000)
+[2026-02-06 17:19:22] ===============================================
+[2026-02-06 17:19:22] Starting latency experiment for step value 1ms (slowdown=10.00%)
+[2026-02-06 17:19:22] ===============================================
+[2026-02-06 17:19:22] ---- Trial 1/1 for step 1ms ----
+[2026-02-06 17:19:22] Trial 1 attempt 1/5
+[2026-02-06 17:19:22] Bringing up a fresh cluster...
+[2026-02-06 17:19:22] Action: up
+[2026-02-06 17:19:22] SSH user: egp1042
+[2026-02-06 17:19:22] Docker command: docker
+[2026-02-06 17:19:22] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:19:22] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:19:23] Teardown complete.
+[2026-02-06 17:19:23] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:19:23] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 17:19:24] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:20:27] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:20:27] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 17:20:28] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 17:20:28] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 17:20:29] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:21:46] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:21:46] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 17:21:47] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 17:21:47] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 17:21:48] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:23:01] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:23:01] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 17:23:02] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 17:23:02] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:23:02] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:23:07] Waiting for schema agreement on all nodes
+[2026-02-06 17:23:11] Schema agreement reached on all nodes
+[2026-02-06 17:23:11] Cluster is up. Running trial with value 1ms...
+[2026-02-06 17:25:03] Experiment output for step 1ms, trial 1:
+[2026-02-06 17:25:03] [2026-02-06 17:23:12] Applying latency restraint on ccl1.cyber.lab (cassandra-node-1): 1ms on interface ens18
+[2026-02-06 17:23:12] Clearing latency restraint on ccl2.cyber.lab (cassandra-node-2) for interface ens18
+[2026-02-06 17:23:12] Clearing latency restraint on ccl3.cyber.lab (cassandra-node-3) for interface ens18
+[2026-02-06 17:23:13] Waiting for Cassandra containers to accept CQL after latency update
+[2026-02-06 17:23:13] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:23:14] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:23:15] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:23:15] Starting load phase
+[2026-02-06 17:23:34] Load phase complete
+[2026-02-06 17:23:34] Starting run phase
+[2026-02-06 17:24:38] Run phase complete
+[2026-02-06 17:24:38] UNHBench logs: /home/egp1042/cass-results/latency_1ms/cassandra_latency_1ms_load.log /home/egp1042/cass-results/latency_1ms/cassandra_latency_1ms_run.log
+[2026-02-06 17:24:38] Processing results in /home/egp1042/cass-results/latency_1ms
+RESULTS:1ms,23990.8361,24675.3425
+[2026-02-06 17:25:01] Removing latency restraint on ccl1.cyber.lab (cassandra-node-1) from interface ens18
+[2026-02-06 17:25:02] Removing latency restraint on ccl2.cyber.lab (cassandra-node-2) from interface ens18
+[2026-02-06 17:25:02] Removing latency restraint on ccl3.cyber.lab (cassandra-node-3) from interface ens18
+[2026-02-06 17:25:03] Recorded trial 1/1: throughput=23990.8361, latency=24675.3425
+[2026-02-06 17:25:03] Tearing down cluster after trial 1...
+[2026-02-06 17:25:03] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:25:09] Teardown complete.
+[2026-02-06 17:25:09] Completed step 1ms: throughput_avg=23990.8361 (stddev=0.0000), latency_avg=24675.3425 (stddev=0.0000)
+[2026-02-06 17:25:09] ===============================================
+[2026-02-06 17:25:09] Starting latency experiment for step value 10ms (slowdown=100.00%)
+[2026-02-06 17:25:09] ===============================================
+[2026-02-06 17:25:09] ---- Trial 1/1 for step 10ms ----
+[2026-02-06 17:25:09] Trial 1 attempt 1/5
+[2026-02-06 17:25:09] Bringing up a fresh cluster...
+[2026-02-06 17:25:09] Action: up
+[2026-02-06 17:25:09] SSH user: egp1042
+[2026-02-06 17:25:09] Docker command: docker
+[2026-02-06 17:25:09] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:25:09] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:25:10] Teardown complete.
+[2026-02-06 17:25:10] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:25:10] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 17:25:10] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:26:14] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:26:14] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 17:26:15] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 17:26:15] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 17:26:15] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:27:33] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:27:33] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 17:27:35] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 17:27:35] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 17:27:35] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:28:51] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:28:51] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 17:28:52] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 17:28:52] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 17:28:52] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:28:57] Waiting for schema agreement on all nodes
+[2026-02-06 17:29:01] Schema agreement reached on all nodes
+[2026-02-06 17:29:01] Cluster is up. Running trial with value 10ms...
+[2026-02-06 17:30:53] Experiment output for step 10ms, trial 1:
+[2026-02-06 17:30:53] [2026-02-06 17:29:01] Applying latency restraint on ccl1.cyber.lab (cassandra-node-1): 10ms on interface ens18
+[2026-02-06 17:29:02] Clearing latency restraint on ccl2.cyber.lab (cassandra-node-2) for interface ens18
+[2026-02-06 17:29:02] Clearing latency restraint on ccl3.cyber.lab (cassandra-node-3) for interface ens18
+[2026-02-06 17:29:03] Waiting for Cassandra containers to accept CQL after latency update
+[2026-02-06 17:29:03] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 17:29:04] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 17:29:05] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 17:29:05] Starting load phase
+[2026-02-06 17:29:25] Load phase complete
+[2026-02-06 17:29:25] Starting run phase
+[2026-02-06 17:30:29] Run phase complete
+[2026-02-06 17:30:29] UNHBench logs: /home/egp1042/cass-results/latency_10ms/cassandra_latency_10ms_load.log /home/egp1042/cass-results/latency_10ms/cassandra_latency_10ms_run.log
+[2026-02-06 17:30:29] Processing results in /home/egp1042/cass-results/latency_10ms
+RESULTS:10ms,25231.3103,167735.8747
+[2026-02-06 17:30:52] Removing latency restraint on ccl1.cyber.lab (cassandra-node-1) from interface ens18
+[2026-02-06 17:30:53] Removing latency restraint on ccl2.cyber.lab (cassandra-node-2) from interface ens18
+[2026-02-06 17:30:53] Removing latency restraint on ccl3.cyber.lab (cassandra-node-3) from interface ens18
+[2026-02-06 17:30:53] Recorded trial 1/1: throughput=25231.3103, latency=167735.8747
+[2026-02-06 17:30:53] Tearing down cluster after trial 1...
+[2026-02-06 17:30:53] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 17:31:00] Teardown complete.
+[2026-02-06 17:31:00] Completed step 10ms: throughput_avg=25231.3103 (stddev=0.0000), latency_avg=167735.8747 (stddev=0.0000)
+[2026-02-06 17:31:00] All experiments complete.
+[2026-02-06 17:31:00] Trial data written to: /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/data/cass_latency_trials_20260206_170745.csv
+[2026-02-06 17:31:00] Summary data written to: /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/data/cass_latency_summary_20260206_170745.csv
+[2026-02-06 17:31:00] Plots will be written to:
+[2026-02-06 17:31:00]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_normalized_throughput_degrading_by_network_latency.png
+[2026-02-06 17:31:00]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_relative_slowdown_degrading_by_network_latency.png
+[2026-02-06 17:31:00]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_throughput_degrading_by_network_latency.png
+[2026-02-06 17:31:00]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_latency_degrading_by_network_latency.png
+[2026-02-06 17:31:00] Calling process_cass_values.py ...
+[2026-02-06 17:31:00] Final point: mode=latency, value=10us, slowdown=0.10%, throughput=23990.4262, latency=60118.4467
+[2026-02-06 17:31:00] Final point: mode=latency, value=100us, slowdown=1.00%, throughput=23990.5738, latency=45509.1091
+[2026-02-06 17:31:00] Final point: mode=latency, value=1ms, slowdown=10.00%, throughput=23990.8361, latency=24675.3425
+[2026-02-06 17:31:00] Final point: mode=latency, value=10ms, slowdown=100.00%, throughput=25231.3103, latency=167735.8747
+cpu_pct,cpu_availability_pct,throughput,latency,normalized_throughput
+0.1,99.9,23990.43,60118.45,0.9508
+1.0,99.0,23990.57,45509.11,0.9508
+10.0,90.0,23990.84,24675.34,0.9508
+100.0,0.0,25231.31,167735.87,1.0000
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_normalized_throughput_degrading_by_network_latency.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_relative_slowdown_degrading_by_network_latency.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_throughput_degrading_by_network_latency.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_latency_degrading_by_network_latency.png

@@ -59,12 +59,12 @@ wait_for_cql() {
 
   log "Waiting for CQL on ${host} (${container})"
   local i
-  for i in $(seq 1 40); do
+  for i in $(seq 1 90); do
     if ssh_run "${host}" "${DOCKER_CMD} exec -i ${container} cqlsh -e \"SELECT now() FROM system.local\" >/dev/null 2>&1"; then
       log "CQL ready on ${host} (${container})"
       return 0
     fi
-    sleep 5
+    sleep 2
   done
   echo "CQL did not become ready on ${host} (${container})"
   return 1
@@ -77,14 +77,14 @@ wait_for_node_normal() {
 
   log "Waiting for node ${ip} on ${host} (${container}) to reach UN (Up/Normal)"
   local i
-  for i in $(seq 1 40); do
+  for i in $(seq 1 90); do
     if ssh_run "${host}" "${DOCKER_CMD} exec -i ${container} nodetool status" 2>/dev/null | \
        awk -v ip="${ip}" '$1 ~ /^UN$/ && $2 == ip {found=1} END {exit !found}'; then
       log "Node ${ip} on ${host} is UN"
       return 0
     fi
-    echo "  ... not UN yet (${i}/40), sleeping 5s"
-    sleep 5
+    echo "  ... not UN yet (${i}/90), sleeping 2s"
+    sleep 2
   done
   echo "Node ${ip} did not reach UN on ${host} (${container})"
   return 1
@@ -173,7 +173,7 @@ EOF
 wait_for_schema() {
   log "Waiting for schema agreement on all nodes"
   local i
-  for i in $(seq 1 40); do
+  for i in $(seq 1 90); do
     local ok=1
     local idx
     for idx in "${!TARGET_HOSTS[@]}"; do
@@ -192,8 +192,8 @@ wait_for_schema() {
       log "Schema agreement reached on all nodes"
       return 0
     fi
-    echo "  ... schema not ready yet (${i}/40), sleeping 5s"
-    sleep 5
+    echo "  ... schema not ready yet (${i}/90), sleeping 2s"
+    sleep 2
   done
   echo "Schema did not propagate to all nodes"
   return 1

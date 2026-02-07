@@ -1,0 +1,252 @@
+[2026-02-06 16:15:00] Bench host ccl4.cyber.lab has 32 CPUs; using THREAD_COUNT=1024, WORKLOAD_TARGET=24000
+[2026-02-06 16:15:00] Slowdown type: memory
+[2026-02-06 16:15:00] Baseline value on non-slowdown nodes: 49152
+[2026-02-06 16:15:00] Steps to test: 49152 36864 24576 12288
+[2026-02-06 16:15:00] Trials per step: 1
+[2026-02-06 16:15:00] Max attempts per trial: 5
+[2026-02-06 16:15:00] ===============================================
+[2026-02-06 16:15:00] Starting memory experiment for step value 49152 (slowdown=0.00%)
+[2026-02-06 16:15:00] ===============================================
+[2026-02-06 16:15:00] ---- Trial 1/1 for step 49152 ----
+[2026-02-06 16:15:00] Trial 1 attempt 1/5
+[2026-02-06 16:15:00] Bringing up a fresh cluster...
+[2026-02-06 16:15:00] Action: up
+[2026-02-06 16:15:00] SSH user: egp1042
+[2026-02-06 16:15:00] Docker command: docker
+[2026-02-06 16:15:00] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:15:00] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:15:01] Teardown complete.
+[2026-02-06 16:15:01] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:15:01] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 16:15:01] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:16:05] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:16:05] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 16:16:06] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 16:16:06] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 16:16:06] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:17:20] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:17:20] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 16:17:21] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 16:17:21] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 16:17:22] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:18:38] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:18:38] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 16:18:39] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 16:18:39] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:18:39] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:18:43] Waiting for schema agreement on all nodes
+[2026-02-06 16:18:48] Schema agreement reached on all nodes
+[2026-02-06 16:18:48] Cluster is up. Running trial with value 49152...
+[2026-02-06 16:20:37] Experiment output for step 49152, trial 1:
+[2026-02-06 16:20:37] [2026-02-06 16:18:48] Clearing memory pressure on ccl1.cyber.lab (target availability 49152MB)
+[2026-02-06 16:18:48] Clearing memory pressure on ccl2.cyber.lab (target availability 49152MB)
+[2026-02-06 16:18:48] Clearing memory pressure on ccl3.cyber.lab (target availability 49152MB)
+[2026-02-06 16:18:48] Waiting for Cassandra containers to accept CQL after memory update
+[2026-02-06 16:18:49] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:18:50] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:18:51] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:18:51] Starting load phase
+[2026-02-06 16:19:10] Load phase complete
+[2026-02-06 16:19:10] Starting run phase
+[2026-02-06 16:20:14] Run phase complete
+[2026-02-06 16:20:14] UNHBench logs: /home/egp1042/cass-results/memory_49152/cassandra_memory_49152_load.log /home/egp1042/cass-results/memory_49152/cassandra_memory_49152_run.log
+[2026-02-06 16:20:14] Processing results in /home/egp1042/cass-results/memory_49152
+RESULTS:49152,23990.7705,37739.4101
+[2026-02-06 16:20:37] Clearing memory pressure on ccl1.cyber.lab for cassandra-node-1
+[2026-02-06 16:20:37] Clearing memory pressure on ccl2.cyber.lab for cassandra-node-2
+[2026-02-06 16:20:37] Clearing memory pressure on ccl3.cyber.lab for cassandra-node-3
+[2026-02-06 16:20:37] Recorded trial 1/1: throughput=23990.7705, latency=37739.4101
+[2026-02-06 16:20:37] Tearing down cluster after trial 1...
+[2026-02-06 16:20:37] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:20:44] Teardown complete.
+[2026-02-06 16:20:44] Completed step 49152: throughput_avg=23990.7705 (stddev=0.0000), latency_avg=37739.4101 (stddev=0.0000)
+[2026-02-06 16:20:44] ===============================================
+[2026-02-06 16:20:44] Starting memory experiment for step value 36864 (slowdown=25.00%)
+[2026-02-06 16:20:44] ===============================================
+[2026-02-06 16:20:44] ---- Trial 1/1 for step 36864 ----
+[2026-02-06 16:20:44] Trial 1 attempt 1/5
+[2026-02-06 16:20:44] Bringing up a fresh cluster...
+[2026-02-06 16:20:44] Action: up
+[2026-02-06 16:20:44] SSH user: egp1042
+[2026-02-06 16:20:44] Docker command: docker
+[2026-02-06 16:20:44] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:20:44] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:20:44] Teardown complete.
+[2026-02-06 16:20:44] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:20:44] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 16:20:45] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:21:49] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:21:49] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 16:21:50] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 16:21:50] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 16:21:50] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:23:03] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:23:03] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 16:23:05] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 16:23:05] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 16:23:05] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:24:21] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:24:21] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 16:24:22] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 16:24:22] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:24:22] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:24:27] Waiting for schema agreement on all nodes
+[2026-02-06 16:24:31] Schema agreement reached on all nodes
+[2026-02-06 16:24:31] Cluster is up. Running trial with value 36864...
+[2026-02-06 16:26:30] Experiment output for step 36864, trial 1:
+[2026-02-06 16:26:30] [2026-02-06 16:24:31] Applying memory pressure on ccl1.cyber.lab: reserving 12288MB in tmpfs (target availability 36864MB)
+[2026-02-06 16:24:37] Clearing memory pressure on ccl2.cyber.lab (target availability 49152MB)
+[2026-02-06 16:24:38] Clearing memory pressure on ccl3.cyber.lab (target availability 49152MB)
+[2026-02-06 16:24:38] Waiting for Cassandra containers to accept CQL after memory update
+[2026-02-06 16:24:39] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:24:39] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:24:40] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:24:41] Starting load phase
+[2026-02-06 16:25:00] Load phase complete
+[2026-02-06 16:25:00] Starting run phase
+[2026-02-06 16:26:04] Run phase complete
+[2026-02-06 16:26:04] UNHBench logs: /home/egp1042/cass-results/memory_36864/cassandra_memory_36864_load.log /home/egp1042/cass-results/memory_36864/cassandra_memory_36864_run.log
+[2026-02-06 16:26:04] Processing results in /home/egp1042/cass-results/memory_36864
+RESULTS:36864,23990.7541,31016.3022
+[2026-02-06 16:26:28] Clearing memory pressure on ccl1.cyber.lab for cassandra-node-1
+[2026-02-06 16:26:29] Clearing memory pressure on ccl2.cyber.lab for cassandra-node-2
+[2026-02-06 16:26:30] Clearing memory pressure on ccl3.cyber.lab for cassandra-node-3
+[2026-02-06 16:26:30] Recorded trial 1/1: throughput=23990.7541, latency=31016.3022
+[2026-02-06 16:26:30] Tearing down cluster after trial 1...
+[2026-02-06 16:26:30] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:26:36] Teardown complete.
+[2026-02-06 16:26:36] Completed step 36864: throughput_avg=23990.7541 (stddev=0.0000), latency_avg=31016.3022 (stddev=0.0000)
+[2026-02-06 16:26:36] ===============================================
+[2026-02-06 16:26:36] Starting memory experiment for step value 24576 (slowdown=50.00%)
+[2026-02-06 16:26:36] ===============================================
+[2026-02-06 16:26:36] ---- Trial 1/1 for step 24576 ----
+[2026-02-06 16:26:36] Trial 1 attempt 1/5
+[2026-02-06 16:26:36] Bringing up a fresh cluster...
+[2026-02-06 16:26:36] Action: up
+[2026-02-06 16:26:36] SSH user: egp1042
+[2026-02-06 16:26:36] Docker command: docker
+[2026-02-06 16:26:36] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:26:36] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:26:37] Teardown complete.
+[2026-02-06 16:26:37] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:26:37] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 16:26:37] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:27:41] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:27:41] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 16:27:42] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 16:27:42] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 16:27:42] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:28:59] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:28:59] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 16:29:00] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 16:29:00] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 16:29:00] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:30:13] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:30:13] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 16:30:14] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 16:30:14] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:30:14] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:30:19] Waiting for schema agreement on all nodes
+[2026-02-06 16:30:23] Schema agreement reached on all nodes
+[2026-02-06 16:30:23] Cluster is up. Running trial with value 24576...
+[2026-02-06 16:32:25] Experiment output for step 24576, trial 1:
+[2026-02-06 16:32:25] [2026-02-06 16:30:23] Applying memory pressure on ccl1.cyber.lab: reserving 24576MB in tmpfs (target availability 24576MB)
+[2026-02-06 16:30:35] Clearing memory pressure on ccl2.cyber.lab (target availability 49152MB)
+[2026-02-06 16:30:36] Clearing memory pressure on ccl3.cyber.lab (target availability 49152MB)
+[2026-02-06 16:30:36] Waiting for Cassandra containers to accept CQL after memory update
+[2026-02-06 16:30:37] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:30:37] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:30:38] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:30:39] Starting load phase
+[2026-02-06 16:30:58] Load phase complete
+[2026-02-06 16:30:58] Starting run phase
+[2026-02-06 16:32:02] Run phase complete
+[2026-02-06 16:32:02] UNHBench logs: /home/egp1042/cass-results/memory_24576/cassandra_memory_24576_load.log /home/egp1042/cass-results/memory_24576/cassandra_memory_24576_run.log
+[2026-02-06 16:32:02] Processing results in /home/egp1042/cass-results/memory_24576
+RESULTS:24576,23990.7213,53299.3803
+[2026-02-06 16:32:22] Clearing memory pressure on ccl1.cyber.lab for cassandra-node-1
+[2026-02-06 16:32:25] Clearing memory pressure on ccl2.cyber.lab for cassandra-node-2
+[2026-02-06 16:32:25] Clearing memory pressure on ccl3.cyber.lab for cassandra-node-3
+[2026-02-06 16:32:25] Recorded trial 1/1: throughput=23990.7213, latency=53299.3803
+[2026-02-06 16:32:25] Tearing down cluster after trial 1...
+[2026-02-06 16:32:25] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:32:31] Teardown complete.
+[2026-02-06 16:32:31] Completed step 24576: throughput_avg=23990.7213 (stddev=0.0000), latency_avg=53299.3803 (stddev=0.0000)
+[2026-02-06 16:32:31] ===============================================
+[2026-02-06 16:32:31] Starting memory experiment for step value 12288 (slowdown=75.00%)
+[2026-02-06 16:32:31] ===============================================
+[2026-02-06 16:32:31] ---- Trial 1/1 for step 12288 ----
+[2026-02-06 16:32:31] Trial 1 attempt 1/5
+[2026-02-06 16:32:31] Bringing up a fresh cluster...
+[2026-02-06 16:32:31] Action: up
+[2026-02-06 16:32:31] SSH user: egp1042
+[2026-02-06 16:32:31] Docker command: docker
+[2026-02-06 16:32:31] Target hosts: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:32:31] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:32:32] Teardown complete.
+[2026-02-06 16:32:32] Seed host: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:32:32] Starting Cassandra on ccl1.cyber.lab (10.255.221.67) as cassandra-node-1 with seeds 10.255.221.67
+[2026-02-06 16:32:33] Waiting for CQL on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:33:36] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:33:36] Waiting for node 10.255.221.67 on ccl1.cyber.lab (cassandra-node-1) to reach UN (Up/Normal)
+[2026-02-06 16:33:37] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-06 16:33:37] Starting Cassandra on ccl2.cyber.lab (10.255.93.19) as cassandra-node-2 with seeds 10.255.221.67
+[2026-02-06 16:33:38] Waiting for CQL on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:34:54] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:34:54] Waiting for node 10.255.93.19 on ccl2.cyber.lab (cassandra-node-2) to reach UN (Up/Normal)
+[2026-02-06 16:34:55] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-06 16:34:55] Starting Cassandra on ccl3.cyber.lab (10.255.91.7) as cassandra-node-3 with seeds 10.255.221.67
+[2026-02-06 16:34:55] Waiting for CQL on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:36:12] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:36:12] Waiting for node 10.255.91.7 on ccl3.cyber.lab (cassandra-node-3) to reach UN (Up/Normal)
+[2026-02-06 16:36:13] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-06 16:36:13] Cluster bring-up complete. Seed node: ccl1.cyber.lab (10.255.221.67)
+[2026-02-06 16:36:13] Creating keyspaces 'ycsb' and 'test' with table 'usertable' on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:36:17] Waiting for schema agreement on all nodes
+[2026-02-06 16:36:21] Schema agreement reached on all nodes
+[2026-02-06 16:36:21] Cluster is up. Running trial with value 12288...
+[2026-02-06 16:38:31] Experiment output for step 12288, trial 1:
+[2026-02-06 16:38:31] [2026-02-06 16:36:21] Applying memory pressure on ccl1.cyber.lab: reserving 36864MB in tmpfs (target availability 12288MB)
+[2026-02-06 16:36:40] Clearing memory pressure on ccl2.cyber.lab (target availability 49152MB)
+[2026-02-06 16:36:40] Clearing memory pressure on ccl3.cyber.lab (target availability 49152MB)
+[2026-02-06 16:36:40] Waiting for Cassandra containers to accept CQL after memory update
+[2026-02-06 16:36:41] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-06 16:36:42] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-06 16:36:43] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-06 16:36:43] Starting load phase
+[2026-02-06 16:37:02] Load phase complete
+[2026-02-06 16:37:02] Starting run phase
+[2026-02-06 16:38:06] Run phase complete
+[2026-02-06 16:38:06] UNHBench logs: /home/egp1042/cass-results/memory_12288/cassandra_memory_12288_load.log /home/egp1042/cass-results/memory_12288/cassandra_memory_12288_run.log
+[2026-02-06 16:38:06] Processing results in /home/egp1042/cass-results/memory_12288
+RESULTS:12288,23990.5410,19207.4766
+[2026-02-06 16:38:27] Clearing memory pressure on ccl1.cyber.lab for cassandra-node-1
+[2026-02-06 16:38:30] Clearing memory pressure on ccl2.cyber.lab for cassandra-node-2
+[2026-02-06 16:38:31] Clearing memory pressure on ccl3.cyber.lab for cassandra-node-3
+[2026-02-06 16:38:31] Recorded trial 1/1: throughput=23990.5410, latency=19207.4766
+[2026-02-06 16:38:31] Tearing down cluster after trial 1...
+[2026-02-06 16:38:31] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-06 16:38:37] Teardown complete.
+[2026-02-06 16:38:37] Completed step 12288: throughput_avg=23990.5410 (stddev=0.0000), latency_avg=19207.4766 (stddev=0.0000)
+[2026-02-06 16:38:37] All experiments complete.
+[2026-02-06 16:38:37] Trial data written to: /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/data/cass_memory_trials_20260206_161500.csv
+[2026-02-06 16:38:37] Summary data written to: /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/data/cass_memory_summary_20260206_161500.csv
+[2026-02-06 16:38:37] Plots will be written to:
+[2026-02-06 16:38:37]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_normalized_throughput_degrading_by_memory.png
+[2026-02-06 16:38:37]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_relative_slowdown_degrading_by_memory.png
+[2026-02-06 16:38:37]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_throughput_degrading_by_memory.png
+[2026-02-06 16:38:37]   - /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_latency_degrading_by_memory.png
+[2026-02-06 16:38:37] Calling process_cass_values.py ...
+[2026-02-06 16:38:37] Final point: mode=memory, value=49152, slowdown=0.00%, throughput=23990.7705, latency=37739.4101
+[2026-02-06 16:38:37] Final point: mode=memory, value=36864, slowdown=25.00%, throughput=23990.7541, latency=31016.3022
+[2026-02-06 16:38:37] Final point: mode=memory, value=24576, slowdown=50.00%, throughput=23990.7213, latency=53299.3803
+[2026-02-06 16:38:37] Final point: mode=memory, value=12288, slowdown=75.00%, throughput=23990.5410, latency=19207.4766
+cpu_pct,cpu_availability_pct,throughput,latency,normalized_throughput
+0.0,100.0,23990.77,37739.41,1.0000
+25.0,75.0,23990.75,31016.30,1.0000
+50.0,50.0,23990.72,53299.38,1.0000
+75.0,25.0,23990.54,19207.48,1.0000
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_normalized_throughput_degrading_by_memory.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_relative_slowdown_degrading_by_memory.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_throughput_degrading_by_memory.png
+Wrote plot to /home/egp1042/Documents/CodingProjects/unh-bench-scripts/out/throughput_24000/graphs/cassandra_latency_degrading_by_memory.png
