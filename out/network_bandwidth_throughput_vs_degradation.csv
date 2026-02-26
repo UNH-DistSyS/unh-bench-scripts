@@ -1,0 +1,6 @@
+mode,latency_target_ms,step_value,step_label,observed_throughput_ops_s
+network_bandwidth,25.0000,100,100Mbps,24213.9337
+network_bandwidth,25.0000,10,10Mbps,497.8044
+network_bandwidth,25.0000,25,25Mbps,4474.8066
+network_bandwidth,25.0000,500,500Mbps,46733.1165
+network_bandwidth,25.0000,50,50Mbps,11037.8684

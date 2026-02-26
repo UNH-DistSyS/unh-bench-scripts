@@ -1,0 +1,103 @@
+[2026-02-24 22:23:43] Starting step 2c for latency target 25ms
+[2026-02-24 22:23:43] Restoring snapshot 'baseline' before step 2c
+[2026-02-24 22:23:43] Restoring snapshot 'baseline'
+[2026-02-24 22:23:43] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-24 22:23:45] Cluster teardown complete
+[2026-02-24 22:23:45] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-24 22:23:45] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-24 22:23:45] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-24 22:23:48] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-24 22:24:49] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-24 22:24:50] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-24 22:24:50] Starting non-seed nodes serially for stable bootstrap
+[2026-02-24 22:24:50] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-24 22:25:11] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-24 22:25:12] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-24 22:25:12] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-24 22:25:33] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-24 22:25:34] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-24 22:25:35] Schema available on all nodes
+[2026-02-24 22:25:35] Snapshot 'baseline' restore complete
+[2026-02-24 22:25:35] Running mode=search, slowdown_type=cpu, step=2, client_type=hybrid
+[2026-02-24 22:25:38] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-24 22:25:48] Applying CPU limit on ccl1.cyber.lab (cassandra-node-1): 0-1
+[2026-02-24 22:25:48] Applying CPU limit on ccl2.cyber.lab (cassandra-node-2): 0-3
+[2026-02-24 22:25:49] Applying CPU limit on ccl3.cyber.lab (cassandra-node-3): 0-3
+[2026-02-24 22:25:51] Max-throughput binary search: step=2 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[2000,512000]
+[2026-02-24 22:25:51] Eval 1: phase=find target=32000 trials=3 duration=15s
+[2026-02-24 22:25:51] Benchmark run: phase=find step=2 target=32000 duration=15s trial=1 attempt=1
+[2026-02-24 22:26:49] Benchmark run: phase=find step=2 target=32000 duration=15s trial=2 attempt=1
+[2026-02-24 22:27:30] Benchmark run: phase=find step=2 target=32000 duration=15s trial=3 attempt=1
+[2026-02-24 22:28:06] Eval 1 result: target=32000 avg_thr=32257.1111 median_lat_us=1085168.5660 pass=false status=ok
+[2026-02-24 22:28:06] Eval 2: phase=find target=16500 trials=3 duration=15s
+[2026-02-24 22:28:06] Benchmark run: phase=find step=2 target=16500 duration=15s trial=1 attempt=1
+[2026-02-24 22:28:41] Benchmark run: phase=find step=2 target=16500 duration=15s trial=2 attempt=1
+[2026-02-24 22:29:16] Benchmark run: phase=find step=2 target=16500 duration=15s trial=3 attempt=1
+[2026-02-24 22:29:50] Eval 2 result: target=16500 avg_thr=15972.2944 median_lat_us=1200.5941 pass=true status=ok
+[2026-02-24 22:29:50] Eval 3: phase=find target=24000 trials=3 duration=15s
+[2026-02-24 22:29:50] Benchmark run: phase=find step=2 target=24000 duration=15s trial=1 attempt=1
+[2026-02-24 22:30:26] Benchmark run: phase=find step=2 target=24000 duration=15s trial=2 attempt=1
+[2026-02-24 22:31:02] Benchmark run: phase=find step=2 target=24000 duration=15s trial=3 attempt=1
+[2026-02-24 22:31:37] Eval 3 result: target=24000 avg_thr=23374.5125 median_lat_us=6310.2576 pass=true status=ok
+[2026-02-24 22:31:37] Eval 4: phase=find target=28000 trials=3 duration=15s
+[2026-02-24 22:31:37] Benchmark run: phase=find step=2 target=28000 duration=15s trial=1 attempt=1
+[2026-02-24 22:32:13] Benchmark run: phase=find step=2 target=28000 duration=15s trial=2 attempt=1
+[2026-02-24 22:32:49] Benchmark run: phase=find step=2 target=28000 duration=15s trial=3 attempt=1
+[2026-02-24 22:33:24] Eval 4 result: target=28000 avg_thr=28570.8444 median_lat_us=4600.2587 pass=true status=ok
+[2026-02-24 22:33:24] Eval 5: phase=find target=30000 trials=3 duration=15s
+[2026-02-24 22:33:24] Benchmark run: phase=find step=2 target=30000 duration=15s trial=1 attempt=1
+[2026-02-24 22:34:00] Benchmark run: phase=find step=2 target=30000 duration=15s trial=2 attempt=1
+[2026-02-24 22:34:37] Benchmark run: phase=find step=2 target=30000 duration=15s trial=3 attempt=1
+[2026-02-24 22:35:12] Eval 5 result: target=30000 avg_thr=30302.6222 median_lat_us=33593.2435 pass=false status=ok
+[2026-02-24 22:35:12] Eval 6: phase=find target=29000 trials=3 duration=15s
+[2026-02-24 22:35:12] Benchmark run: phase=find step=2 target=29000 duration=15s trial=1 attempt=1
+[2026-02-24 22:35:47] Benchmark run: phase=find step=2 target=29000 duration=15s trial=2 attempt=1
+[2026-02-24 22:36:22] Benchmark run: phase=find step=2 target=29000 duration=15s trial=3 attempt=1
+[2026-02-24 22:36:58] Eval 6 result: target=29000 avg_thr=28186.5708 median_lat_us=8790.6867 pass=true status=ok
+[2026-02-24 22:36:58] Eval 7: phase=find target=29500 trials=3 duration=15s
+[2026-02-24 22:36:58] Benchmark run: phase=find step=2 target=29500 duration=15s trial=1 attempt=1
+[2026-02-24 22:37:33] Benchmark run: phase=find step=2 target=29500 duration=15s trial=2 attempt=1
+[2026-02-24 22:38:08] Benchmark run: phase=find step=2 target=29500 duration=15s trial=3 attempt=1
+[2026-02-24 22:38:43] Eval 7 result: target=29500 avg_thr=29041.0528 median_lat_us=4672.8132 pass=true status=ok
+[2026-02-24 22:38:43] Refining search upward: best_median_latency_us=4672.8132 is farther than 250us from target
+[2026-02-24 22:38:43] Validating candidate throughput=29500 with 3 trial(s)
+[2026-02-24 22:38:43] Eval 8: phase=validate target=29500 trials=3 duration=90s
+[2026-02-24 22:38:43] Benchmark run: phase=validate step=2 target=29500 duration=90s trial=1 attempt=1
+[2026-02-24 22:40:37] Benchmark run: phase=validate step=2 target=29500 duration=90s trial=2 attempt=1
+[2026-02-24 22:42:30] Benchmark run: phase=validate step=2 target=29500 duration=90s trial=3 attempt=1
+[2026-02-24 22:44:21] Eval 8 result: target=29500 avg_thr=30152.2690 median_lat_us=5380.9759 pass=true status=ok
+[2026-02-24 22:44:21] Validated median latency is still far below target, probing higher targets (max 6)
+[2026-02-24 22:44:21] Eval 9: phase=validate_climb target=30000 trials=3 duration=90s
+[2026-02-24 22:44:21] Benchmark run: phase=validate_climb step=2 target=30000 duration=90s trial=1 attempt=1
+[2026-02-24 22:46:16] Benchmark run: phase=validate_climb step=2 target=30000 duration=90s trial=2 attempt=1
+[2026-02-24 22:48:06] Benchmark run: phase=validate_climb step=2 target=30000 duration=90s trial=3 attempt=1
+[2026-02-24 22:49:57] Eval 9 result: target=30000 avg_thr=29850.7562 median_lat_us=13103.9300 pass=true status=ok
+[2026-02-24 22:49:57] Eval 10: phase=validate_climb target=30500 trials=3 duration=90s
+[2026-02-24 22:49:57] Benchmark run: phase=validate_climb step=2 target=30500 duration=90s trial=1 attempt=1
+[2026-02-24 22:51:48] Benchmark run: phase=validate_climb step=2 target=30500 duration=90s trial=2 attempt=1
+[2026-02-24 22:53:37] Benchmark run: phase=validate_climb step=2 target=30500 duration=90s trial=3 attempt=1
+[2026-02-24 22:55:29] Eval 10 result: target=30500 avg_thr=30929.4872 median_lat_us=5245.0464 pass=true status=ok
+[2026-02-24 22:55:29] Eval 11: phase=validate_climb target=31000 trials=3 duration=90s
+[2026-02-24 22:55:29] Benchmark run: phase=validate_climb step=2 target=31000 duration=90s trial=1 attempt=1
+[2026-02-24 22:57:19] Benchmark run: phase=validate_climb step=2 target=31000 duration=90s trial=2 attempt=1
+[2026-02-24 22:59:10] Benchmark run: phase=validate_climb step=2 target=31000 duration=90s trial=3 attempt=1
+[2026-02-24 23:00:57] Eval 11 result: target=31000 avg_thr=30929.4923 median_lat_us=6639.3221 pass=true status=ok
+[2026-02-24 23:00:57] Eval 12: phase=validate_climb target=31500 trials=3 duration=90s
+[2026-02-24 23:00:57] Benchmark run: phase=validate_climb step=2 target=31500 duration=90s trial=1 attempt=1
+[2026-02-24 23:02:45] Benchmark run: phase=validate_climb step=2 target=31500 duration=90s trial=2 attempt=1
+[2026-02-24 23:04:36] Benchmark run: phase=validate_climb step=2 target=31500 duration=90s trial=3 attempt=1
+[2026-02-24 23:06:25] Eval 12 result: target=31500 avg_thr=32258.0645 median_lat_us=7245.4395 pass=true status=ok
+[2026-02-24 23:06:25] Eval 13: phase=validate_climb target=32000 trials=3 duration=90s
+[2026-02-24 23:06:25] Benchmark run: phase=validate_climb step=2 target=32000 duration=90s trial=1 attempt=1
+[2026-02-24 23:08:16] Benchmark run: phase=validate_climb step=2 target=32000 duration=90s trial=2 attempt=1
+[2026-02-24 23:10:06] Benchmark run: phase=validate_climb step=2 target=32000 duration=90s trial=3 attempt=1
+[2026-02-24 23:11:56] Eval 13 result: target=32000 avg_thr=31916.7146 median_lat_us=10242.3589 pass=true status=ok
+[2026-02-24 23:11:57] Eval 14: phase=validate_climb target=32500 trials=3 duration=90s
+[2026-02-24 23:11:57] Benchmark run: phase=validate_climb step=2 target=32500 duration=90s trial=1 attempt=1
+[2026-02-24 23:13:43] Benchmark run: phase=validate_climb step=2 target=32500 duration=90s trial=2 attempt=1
+[2026-02-24 23:15:33] Benchmark run: phase=validate_climb step=2 target=32500 duration=90s trial=3 attempt=1
+[2026-02-24 23:17:19] Eval 14 result: target=32500 avg_thr=32786.8961 median_lat_us=7176.9505 pass=true status=ok
+[2026-02-24 23:17:19] Search complete: slowdown_type=cpu step=2 max_target=32500 observed_throughput=32786.8961 observed_latency_us=7176.9505 validated=true
+MAX_RESULT:32500,32786.8961,7176.9505,true
+RESULTS:32786.8961,7176.9505
+[2026-02-24 23:17:20] Completed step 2c: max_target=32500, observed_thr=32786.8961, observed_lat_us=7176.9505, validated=true

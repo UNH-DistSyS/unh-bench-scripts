@@ -1,0 +1,5 @@
+mode,latency_target_ms,step_value,step_label,observed_throughput_ops_s
+cpu,25.0000,1,1c,35087.7193
+cpu,25.0000,2,2c,48780.4878
+cpu,25.0000,3,3c,51282.0684
+cpu,25.0000,4,4c,51282.0684

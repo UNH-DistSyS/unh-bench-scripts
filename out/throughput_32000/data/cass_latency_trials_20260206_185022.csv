@@ -1,5 +1,0 @@
-slowdown_type,step_value,slowdown_pct,trial,throughput,latency
-latency,10us,0.10,1,31980.0492,105645.9249
-latency,100us,1.00,1,32107.9344,108578.4576
-latency,1ms,10.00,1,32365.9000,124628.7179
-latency,10ms,100.00,1,38040.2745,497603.7320

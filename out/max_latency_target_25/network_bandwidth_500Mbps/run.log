@@ -1,0 +1,291 @@
+[2026-02-25 10:53:00] Starting step 500Mbps for latency target 25ms
+[2026-02-25 10:53:00] Restoring snapshot 'baseline' before step 500Mbps
+[2026-02-25 10:53:00] Restoring snapshot 'baseline'
+[2026-02-25 10:53:00] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-25 10:53:02] Cluster teardown complete
+[2026-02-25 10:53:02] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-25 10:53:02] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-25 10:53:02] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-25 10:53:05] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-25 10:54:06] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-25 10:54:07] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-25 10:54:07] Starting non-seed nodes serially for stable bootstrap
+[2026-02-25 10:54:07] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-25 10:54:27] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-25 10:54:28] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-25 10:54:28] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-25 10:54:46] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-25 10:54:48] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-25 10:54:49] Schema available on all nodes
+[2026-02-25 10:54:49] Snapshot 'baseline' restore complete
+[2026-02-25 10:54:49] Running mode=search, slowdown_type=network, step=500, client_type=hybrid
+[2026-02-25 10:54:51] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-25 10:55:02] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 500mbit egress+ingress via ens18/ifbccl1
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 10:55:03] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 10:55:04] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 10:55:06] Max-throughput binary search: step=500 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[2000,512000]
+[2026-02-25 10:55:06] Eval 1: phase=find target=32000 trials=3 duration=30s
+[2026-02-25 10:55:06] Benchmark run: phase=find step=500 target=32000 duration=30s trial=1 attempt=1
+[2026-02-25 10:56:13] Benchmark run: phase=find step=500 target=32000 duration=30s trial=2 attempt=1
+[2026-02-25 11:00:49] Starting step 500Mbps for latency target 25ms
+[2026-02-25 11:00:49] Restoring snapshot 'baseline' before step 500Mbps
+[2026-02-25 11:00:49] Restoring snapshot 'baseline'
+[2026-02-25 11:00:49] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-25 11:00:51] Cluster teardown complete
+[2026-02-25 11:00:51] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-25 11:00:51] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-25 11:00:51] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-25 11:00:55] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-25 11:01:56] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-25 11:01:57] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-25 11:01:57] Starting non-seed nodes serially for stable bootstrap
+[2026-02-25 11:01:57] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-25 11:02:18] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-25 11:02:19] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-25 11:02:19] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-25 11:02:39] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-25 11:02:40] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-25 11:02:42] Schema available on all nodes
+[2026-02-25 11:02:42] Snapshot 'baseline' restore complete
+[2026-02-25 11:02:42] Running mode=search, slowdown_type=network, step=500, client_type=hybrid
+[2026-02-25 11:02:44] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-25 11:02:55] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 500mbit egress+ingress via ens18/ifbccl1
+Error: Change operation not supported by specified qdisc.
+[2026-02-25 11:02:57] Experiment failed for step 500Mbps
+[2026-02-25 11:45:00] Starting step 500Mbps for latency target 25ms
+[2026-02-25 11:45:00] Restoring snapshot 'baseline' before step 500Mbps
+[2026-02-25 11:45:00] Restoring snapshot 'baseline'
+[2026-02-25 11:45:00] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-25 11:45:02] Cluster teardown complete
+[2026-02-25 11:45:02] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-25 11:45:02] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-25 11:45:02] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-25 11:45:05] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-25 11:46:06] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-25 11:46:07] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-25 11:46:07] Starting non-seed nodes serially for stable bootstrap
+[2026-02-25 11:46:07] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-25 11:46:27] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-25 11:46:28] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-25 11:46:28] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-25 11:46:49] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-25 11:46:51] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-25 11:46:52] Schema available on all nodes
+[2026-02-25 11:46:52] Snapshot 'baseline' restore complete
+[2026-02-25 11:46:52] Running mode=search, slowdown_type=network, step=500, client_type=hybrid
+[2026-02-25 11:46:54] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-25 11:47:05] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 500mbit egress+ingress via ens18/ifbccl1
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 11:47:06] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 11:47:07] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 11:47:09] Max-throughput binary search: step=500 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[2000,512000]
+[2026-02-25 11:47:09] Eval 1: phase=find target=32000 trials=3 duration=30s
+[2026-02-25 11:47:09] Benchmark run: phase=find step=500 target=32000 duration=30s trial=1 attempt=1
+[2026-02-25 11:48:17] Benchmark run: phase=find step=500 target=32000 duration=30s trial=2 attempt=1
+[2026-02-25 11:49:19] Benchmark run: phase=find step=500 target=32000 duration=30s trial=3 attempt=1
+[2026-02-25 11:50:21] Eval 1 result: target=32000 avg_thr=31564.4975 median_lat_us=14204.4903 pass=true status=ok
+[2026-02-25 11:50:21] Eval 2: phase=find target=272000 trials=3 duration=30s
+[2026-02-25 11:50:21] Benchmark run: phase=find step=500 target=272000 duration=30s trial=1 attempt=1
+[2026-02-25 11:51:53] Benchmark run: phase=find step=500 target=272000 duration=30s trial=2 attempt=1
+[2026-02-25 11:53:24] Benchmark run: phase=find step=500 target=272000 duration=30s trial=3 attempt=1
+[2026-02-25 11:54:57] Eval 2 result: target=272000 avg_thr=285714.2857 median_lat_us=17328813.3466 pass=false status=ok
+[2026-02-25 11:54:57] Eval 3: phase=find target=152000 trials=3 duration=30s
+[2026-02-25 11:54:57] Benchmark run: phase=find step=500 target=152000 duration=30s trial=1 attempt=1
+[2026-02-25 11:56:24] Benchmark run: phase=find step=500 target=152000 duration=30s trial=2 attempt=1
+[2026-02-25 11:57:54] Benchmark run: phase=find step=500 target=152000 duration=30s trial=3 attempt=1
+[2026-02-25 11:59:23] Eval 3 result: target=152000 avg_thr=153846.1538 median_lat_us=14024720.7353 pass=false status=ok
+[2026-02-25 11:59:23] Eval 4: phase=find target=92000 trials=3 duration=30s
+[2026-02-25 11:59:23] Benchmark run: phase=find step=500 target=92000 duration=30s trial=1 attempt=1
+[2026-02-25 12:00:53] Benchmark run: phase=find step=500 target=92000 duration=30s trial=2 attempt=1
+[2026-02-25 12:02:22] Benchmark run: phase=find step=500 target=92000 duration=30s trial=3 attempt=1
+[2026-02-25 12:04:00] Eval 4 result: target=92000 avg_thr=95238.0952 median_lat_us=11002287.9696 pass=false status=ok
+[2026-02-25 12:04:00] Eval 5: phase=find target=62000 trials=3 duration=30s
+[2026-02-25 12:04:00] Benchmark run: phase=find step=500 target=62000 duration=30s trial=1 attempt=1
+[2026-02-25 12:05:25] Benchmark run: phase=find step=500 target=62000 duration=30s trial=2 attempt=1
+[2026-02-25 12:06:45] Benchmark run: phase=find step=500 target=62000 duration=30s trial=3 attempt=1
+[2026-02-25 12:08:10] Eval 5 result: target=62000 avg_thr=61827.9591 median_lat_us=3732325.1528 pass=false status=ok
+[2026-02-25 12:08:10] Eval 6: phase=find target=47000 trials=3 duration=30s
+[2026-02-25 12:08:10] Benchmark run: phase=find step=500 target=47000 duration=30s trial=1 attempt=1
+[2026-02-25 12:09:19] Benchmark run: phase=find step=500 target=47000 duration=30s trial=2 attempt=1
+[2026-02-25 12:10:28] Benchmark run: phase=find step=500 target=47000 duration=30s trial=3 attempt=1
+[2026-02-25 12:11:39] Eval 6 result: target=47000 avg_thr=47106.4172 median_lat_us=102117.5718 pass=false status=ok
+[2026-02-25 12:11:39] Eval 7: phase=find target=39500 trials=3 duration=30s
+[2026-02-25 12:11:39] Benchmark run: phase=find step=500 target=39500 duration=30s trial=1 attempt=1
+[2026-02-25 12:12:44] Benchmark run: phase=find step=500 target=39500 duration=30s trial=2 attempt=1
+[2026-02-25 12:13:49] Benchmark run: phase=find step=500 target=39500 duration=30s trial=3 attempt=1
+[2026-02-25 12:14:53] Eval 7 result: target=39500 avg_thr=39140.0638 median_lat_us=7930.6696 pass=true status=ok
+[2026-02-25 12:14:53] Eval 8: phase=find target=43000 trials=3 duration=30s
+[2026-02-25 12:14:54] Benchmark run: phase=find step=500 target=43000 duration=30s trial=1 attempt=1
+[2026-02-25 12:16:00] Benchmark run: phase=find step=500 target=43000 duration=30s trial=2 attempt=1
+[2026-02-25 12:17:06] Benchmark run: phase=find step=500 target=43000 duration=30s trial=3 attempt=1
+[2026-02-25 12:18:15] Eval 8 result: target=43000 avg_thr=42544.0548 median_lat_us=18485.9347 pass=true status=ok
+[2026-02-25 12:18:15] Eval 9: phase=find target=45000 trials=3 duration=30s
+[2026-02-25 12:18:15] Benchmark run: phase=find step=500 target=45000 duration=30s trial=1 attempt=1
+[2026-02-25 12:19:22] Benchmark run: phase=find step=500 target=45000 duration=30s trial=2 attempt=1
+[2026-02-25 12:20:31] Benchmark run: phase=find step=500 target=45000 duration=30s trial=3 attempt=1
+[2026-02-25 12:21:41] Eval 9 result: target=45000 avg_thr=45453.6111 median_lat_us=56793.8088 pass=false status=ok
+[2026-02-25 12:21:41] Eval 10: phase=find target=44000 trials=3 duration=30s
+[2026-02-25 12:21:41] Benchmark run: phase=find step=500 target=44000 duration=30s trial=1 attempt=1
+[2026-02-25 12:22:49] Benchmark run: phase=find step=500 target=44000 duration=30s trial=2 attempt=1
+[2026-02-25 12:23:57] Benchmark run: phase=find step=500 target=44000 duration=30s trial=3 attempt=1
+[2026-02-25 12:25:05] Eval 10 result: target=44000 avg_thr=44965.7595 median_lat_us=19255.6847 pass=true status=ok
+[2026-02-25 12:25:05] Eval 11: phase=find target=44500 trials=3 duration=30s
+[2026-02-25 12:25:05] Benchmark run: phase=find step=500 target=44500 duration=30s trial=1 attempt=1
+[2026-02-25 12:26:12] Benchmark run: phase=find step=500 target=44500 duration=30s trial=2 attempt=1
+[2026-02-25 12:27:19] Benchmark run: phase=find step=500 target=44500 duration=30s trial=3 attempt=1
+[2026-02-25 12:28:28] Eval 11 result: target=44500 avg_thr=43988.9032 median_lat_us=10114.0299 pass=true status=ok
+[2026-02-25 12:28:28] Refining search upward: best_median_latency_us=10114.0299 is farther than 250us from target
+[2026-02-25 12:28:28] Validating candidate throughput=44500 with 5 trial(s)
+[2026-02-25 12:28:28] Eval 12: phase=validate target=44500 trials=5 duration=90s
+[2026-02-25 12:28:28] Benchmark run: phase=validate step=500 target=44500 duration=90s trial=1 attempt=1
+[2026-02-25 12:30:01] Benchmark run: phase=validate step=500 target=44500 duration=90s trial=2 attempt=1
+[2026-02-25 12:31:33] Benchmark run: phase=validate step=500 target=44500 duration=90s trial=3 attempt=1
+[2026-02-25 12:33:08] Benchmark run: phase=validate step=500 target=44500 duration=90s trial=4 attempt=1
+[2026-02-25 12:34:41] Benchmark run: phase=validate step=500 target=44500 duration=90s trial=5 attempt=1
+[2026-02-25 12:36:11] Eval 12 result: target=44500 avg_thr=44444.4533 median_lat_us=24159.1896 pass=true status=ok
+[2026-02-25 12:36:11] Validated median latency is still far below target, probing higher targets (max 6)
+[2026-02-25 12:36:11] Eval 13: phase=validate_climb target=45000 trials=5 duration=90s
+[2026-02-25 12:36:11] Benchmark run: phase=validate_climb step=500 target=45000 duration=90s trial=1 attempt=1
+[2026-02-25 12:37:40] Benchmark run: phase=validate_climb step=500 target=45000 duration=90s trial=2 attempt=1
+[2026-02-25 12:39:14] Benchmark run: phase=validate_climb step=500 target=45000 duration=90s trial=3 attempt=1
+[2026-02-25 12:40:47] Benchmark run: phase=validate_climb step=500 target=45000 duration=90s trial=4 attempt=1
+[2026-02-25 12:42:20] Benchmark run: phase=validate_climb step=500 target=45000 duration=90s trial=5 attempt=1
+[2026-02-25 12:43:54] Eval 13 result: target=45000 avg_thr=44848.4893 median_lat_us=23927.3002 pass=true status=ok
+[2026-02-25 12:43:54] Eval 14: phase=validate_climb target=45500 trials=5 duration=90s
+[2026-02-25 12:43:54] Benchmark run: phase=validate_climb step=500 target=45500 duration=90s trial=1 attempt=1
+[2026-02-25 12:45:23] Benchmark run: phase=validate_climb step=500 target=45500 duration=90s trial=2 attempt=1
+[2026-02-25 12:46:51] Benchmark run: phase=validate_climb step=500 target=45500 duration=90s trial=3 attempt=1
+[2026-02-25 12:48:24] Benchmark run: phase=validate_climb step=500 target=45500 duration=90s trial=4 attempt=1
+[2026-02-25 12:49:58] Benchmark run: phase=validate_climb step=500 target=45500 duration=90s trial=5 attempt=1
+[2026-02-25 12:51:40] Eval 14 result: target=45500 avg_thr=46733.1212 median_lat_us=43781.1930 pass=false status=ok
+[2026-02-25 12:51:40] Search complete: slowdown_type=network step=500 max_target=45000 observed_throughput=44848.4893 observed_latency_us=23927.3002 validated=true
+MAX_RESULT:45000,44848.4893,23927.3002,true
+RESULTS:44848.4893,23927.3002
+[2026-02-25 12:51:42] Completed step 500Mbps: max_target=45000, observed_thr=44848.4893, observed_lat_us=23927.3002, validated=true
+[2026-02-25 17:56:55] Starting step 500Mbps for latency target 25ms
+[2026-02-25 17:56:55] Restoring snapshot 'baseline' before step 500Mbps
+[2026-02-25 17:56:55] Restoring snapshot 'baseline'
+[2026-02-25 17:56:55] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-25 17:56:57] Cluster teardown complete
+[2026-02-25 17:56:57] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-25 17:56:57] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-25 17:56:57] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-25 17:57:00] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-25 17:58:01] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-25 17:58:02] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-25 17:58:02] Starting non-seed nodes serially for stable bootstrap
+[2026-02-25 17:58:02] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-25 17:58:23] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-25 17:58:24] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-25 17:58:24] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-25 17:58:44] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-25 17:58:45] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-25 17:58:47] Schema available on all nodes
+[2026-02-25 17:58:47] Snapshot 'baseline' restore complete
+[2026-02-25 17:58:47] Running mode=search, slowdown_type=network, step=500, client_type=hybrid
+[2026-02-25 17:58:49] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-25 17:59:00] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 500mbit egress+ingress via ens18/ifbccl1
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 17:59:01] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 17:59:01] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
+Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
+Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
+[2026-02-25 17:59:04] Max-throughput binary search: step=500 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[1,512000]
+[2026-02-25 17:59:04] Eval 1: phase=find target=32000 trials=3 duration=30s
+[2026-02-25 17:59:04] Benchmark run: phase=find step=500 target=32000 duration=30s trial=1 attempt=1
+[2026-02-25 18:00:11] Benchmark run: phase=find step=500 target=32000 duration=30s trial=2 attempt=1
+[2026-02-25 18:01:13] Benchmark run: phase=find step=500 target=32000 duration=30s trial=3 attempt=1
+[2026-02-25 18:02:13] Eval 1 result: target=32000 avg_thr=31564.1516 median_lat_us=9734.6459 pass=true status=ok
+[2026-02-25 18:02:13] Eval 2: phase=find target=272000 trials=3 duration=30s
+[2026-02-25 18:02:13] Benchmark run: phase=find step=500 target=272000 duration=30s trial=1 attempt=1
+[2026-02-25 18:03:42] Benchmark run: phase=find step=500 target=272000 duration=30s trial=2 attempt=1
+[2026-02-25 18:05:13] Benchmark run: phase=find step=500 target=272000 duration=30s trial=3 attempt=1
+[2026-02-25 18:06:43] Eval 2 result: target=272000 avg_thr=285714.2857 median_lat_us=17805285.9087 pass=false status=ok
+[2026-02-25 18:06:43] Eval 3: phase=find target=152000 trials=3 duration=30s
+[2026-02-25 18:06:43] Benchmark run: phase=find step=500 target=152000 duration=30s trial=1 attempt=1
+[2026-02-25 18:08:14] Benchmark run: phase=find step=500 target=152000 duration=30s trial=2 attempt=1
+[2026-02-25 18:09:39] Benchmark run: phase=find step=500 target=152000 duration=30s trial=3 attempt=1
+[2026-02-25 18:11:10] Eval 3 result: target=152000 avg_thr=153846.1538 median_lat_us=13702323.1238 pass=false status=ok
+[2026-02-25 18:11:10] Eval 4: phase=find target=92000 trials=3 duration=30s
+[2026-02-25 18:11:10] Benchmark run: phase=find step=500 target=92000 duration=30s trial=1 attempt=1
+[2026-02-25 18:12:39] Benchmark run: phase=find step=500 target=92000 duration=30s trial=2 attempt=1
+[2026-02-25 18:14:04] Benchmark run: phase=find step=500 target=92000 duration=30s trial=3 attempt=1
+[2026-02-25 18:15:44] Eval 4 result: target=92000 avg_thr=95238.0952 median_lat_us=9202173.6630 pass=false status=ok
+[2026-02-25 18:15:44] Eval 5: phase=find target=62000 trials=3 duration=30s
+[2026-02-25 18:15:44] Benchmark run: phase=find step=500 target=62000 duration=30s trial=1 attempt=1
+[2026-02-25 18:17:06] Benchmark run: phase=find step=500 target=62000 duration=30s trial=2 attempt=1
+[2026-02-25 18:18:30] Benchmark run: phase=find step=500 target=62000 duration=30s trial=3 attempt=1
+[2026-02-25 18:19:51] Eval 5 result: target=62000 avg_thr=61155.9996 median_lat_us=3920938.0155 pass=false status=ok
+[2026-02-25 18:19:51] Eval 6: phase=find target=47000 trials=3 duration=30s
+[2026-02-25 18:19:51] Benchmark run: phase=find step=500 target=47000 duration=30s trial=1 attempt=1
+[2026-02-25 18:20:59] Benchmark run: phase=find step=500 target=47000 duration=30s trial=2 attempt=1
+[2026-02-25 18:22:11] Benchmark run: phase=find step=500 target=47000 duration=30s trial=3 attempt=1
+[2026-02-25 18:23:22] Eval 6 result: target=47000 avg_thr=46595.2785 median_lat_us=18977.7995 pass=true status=ok
+[2026-02-25 18:23:22] Eval 7: phase=find target=54500 trials=3 duration=30s
+[2026-02-25 18:23:22] Benchmark run: phase=find step=500 target=54500 duration=30s trial=1 attempt=1
+[2026-02-25 18:24:39] Benchmark run: phase=find step=500 target=54500 duration=30s trial=2 attempt=1
+[2026-02-25 18:25:57] Benchmark run: phase=find step=500 target=54500 duration=30s trial=3 attempt=1
+[2026-02-25 18:27:13] Eval 7 result: target=54500 avg_thr=54958.1717 median_lat_us=2141090.0944 pass=false status=ok
+[2026-02-25 18:27:13] Eval 8: phase=find target=50500 trials=3 duration=30s
+[2026-02-25 18:27:13] Benchmark run: phase=find step=500 target=50500 duration=30s trial=1 attempt=1
+[2026-02-25 18:28:25] Benchmark run: phase=find step=500 target=50500 duration=30s trial=2 attempt=1
+[2026-02-25 18:29:38] Benchmark run: phase=find step=500 target=50500 duration=30s trial=3 attempt=1
+[2026-02-25 18:30:57] Eval 8 result: target=50500 avg_thr=50934.6237 median_lat_us=812543.6000 pass=false status=ok
+[2026-02-25 18:30:57] Eval 9: phase=find target=48500 trials=3 duration=30s
+[2026-02-25 18:30:57] Benchmark run: phase=find step=500 target=48500 duration=30s trial=1 attempt=1
+[2026-02-25 18:32:08] Benchmark run: phase=find step=500 target=48500 duration=30s trial=2 attempt=1
+[2026-02-25 18:33:20] Benchmark run: phase=find step=500 target=48500 duration=30s trial=3 attempt=1
+[2026-02-25 18:34:32] Eval 9 result: target=48500 avg_thr=49462.0204 median_lat_us=70399.2762 pass=false status=ok
+[2026-02-25 18:34:32] Eval 10: phase=find target=47500 trials=3 duration=30s
+[2026-02-25 18:34:32] Benchmark run: phase=find step=500 target=47500 duration=30s trial=1 attempt=1
+[2026-02-25 18:35:43] Benchmark run: phase=find step=500 target=47500 duration=30s trial=2 attempt=1
+[2026-02-25 18:36:53] Benchmark run: phase=find step=500 target=47500 duration=30s trial=3 attempt=1
+[2026-02-25 18:38:03] Eval 10 result: target=47500 avg_thr=46595.1276 median_lat_us=14843.5246 pass=true status=ok
+[2026-02-25 18:38:03] Eval 11: phase=find target=48000 trials=3 duration=30s
+[2026-02-25 18:38:03] Benchmark run: phase=find step=500 target=48000 duration=30s trial=1 attempt=1
+[2026-02-25 18:39:13] Benchmark run: phase=find step=500 target=48000 duration=30s trial=2 attempt=1
+[2026-02-25 18:40:24] Benchmark run: phase=find step=500 target=48000 duration=30s trial=3 attempt=1
+[2026-02-25 18:41:36] Eval 11 result: target=48000 avg_thr=49999.2889 median_lat_us=34410.8553 pass=false status=ok
+[2026-02-25 18:41:36] Refining search upward: best_median_latency_us=14843.5246 is farther than 250us from target
+[2026-02-25 18:41:36] Validating candidate throughput=47500 with 5 trial(s)
+[2026-02-25 18:41:36] Eval 12: phase=validate target=47500 trials=5 duration=90s
+[2026-02-25 18:41:36] Benchmark run: phase=validate step=500 target=47500 duration=90s trial=1 attempt=1
+[2026-02-25 18:43:08] Benchmark run: phase=validate step=500 target=47500 duration=90s trial=2 attempt=1
+[2026-02-25 18:44:37] Benchmark run: phase=validate step=500 target=47500 duration=90s trial=3 attempt=1
+[2026-02-25 18:46:13] Benchmark run: phase=validate step=500 target=47500 duration=90s trial=4 attempt=1
+[2026-02-25 18:47:43] Benchmark run: phase=validate step=500 target=47500 duration=90s trial=5 attempt=1
+[2026-02-25 18:49:15] Eval 12 result: target=47500 avg_thr=46733.1118 median_lat_us=31886.2678 pass=false status=ok
+[2026-02-25 18:49:15] Candidate failed validation, probing lower targets (max 6)
+[2026-02-25 18:49:15] Eval 13: phase=validate_backoff target=47000 trials=5 duration=90s
+[2026-02-25 18:49:15] Benchmark run: phase=validate_backoff step=500 target=47000 duration=90s trial=1 attempt=1
+[2026-02-25 18:50:47] Benchmark run: phase=validate_backoff step=500 target=47000 duration=90s trial=2 attempt=1
+[2026-02-25 18:52:17] Benchmark run: phase=validate_backoff step=500 target=47000 duration=90s trial=3 attempt=1
+[2026-02-25 18:53:48] Benchmark run: phase=validate_backoff step=500 target=47000 duration=90s trial=4 attempt=1
+[2026-02-25 18:55:20] Benchmark run: phase=validate_backoff step=500 target=47000 duration=90s trial=5 attempt=1
+[2026-02-25 18:56:51] Eval 13 result: target=47000 avg_thr=46733.1165 median_lat_us=22310.5358 pass=true status=ok
+[2026-02-25 18:56:51] Validated median latency is still far below target, probing higher targets (max 6)
+[2026-02-25 18:56:51] Eval 14: phase=validate_climb target=47500 trials=5 duration=90s
+[2026-02-25 18:56:51] Benchmark run: phase=validate_climb step=500 target=47500 duration=90s trial=1 attempt=1
+[2026-02-25 18:58:23] Benchmark run: phase=validate_climb step=500 target=47500 duration=90s trial=2 attempt=1
+[2026-02-25 18:59:53] Benchmark run: phase=validate_climb step=500 target=47500 duration=90s trial=3 attempt=1
+[2026-02-25 19:01:27] Benchmark run: phase=validate_climb step=500 target=47500 duration=90s trial=4 attempt=1
+[2026-02-25 19:02:55] Benchmark run: phase=validate_climb step=500 target=47500 duration=90s trial=5 attempt=1
+[2026-02-25 19:04:30] Eval 14 result: target=47500 avg_thr=46511.6419 median_lat_us=64495.2645 pass=false status=ok
+[2026-02-25 19:04:30] Search complete: slowdown_type=network step=500 max_target=47000 observed_throughput=46733.1165 observed_latency_us=22310.5358 validated=true
+MAX_RESULT:47000,46733.1165,22310.5358,true
+RESULTS:46733.1165,22310.5358
+[2026-02-25 19:04:32] Completed step 500Mbps: max_target=47000, observed_thr=46733.1165, observed_lat_us=22310.5358, validated=true
