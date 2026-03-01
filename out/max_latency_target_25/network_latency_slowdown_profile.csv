@@ -1,5 +1,0 @@
-slowdown_type,step_value,step_label,latency_target_ms,fixed_target_throughput,observed_throughput_ops_s,mean_latency_us,median_latency_us,p99_latency_us
-network_latency,0.25ms,0.25ms,25,48000,49180.5967,3779150.3887,77947.0000,4705072.4000
-network_latency,0.5ms,0.5ms,25,44000,44858.5721,2044418.6659,3349.0000,2681044.0000
-network_latency,1ms,1ms,25,42000,42765.7836,2273037.1253,5040.0000,2965863.2000
-network_latency,5ms,5ms,25,38000,38083.2873,2916096.3198,11253.0000,3684459.6000

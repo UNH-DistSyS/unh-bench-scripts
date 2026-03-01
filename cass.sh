@@ -30,6 +30,7 @@ PROFILE_TARGET_FACTOR="${PROFILE_TARGET_FACTOR:-0.8}"
 PROFILE_FIXED_THROUGHPUT="${PROFILE_FIXED_THROUGHPUT:-}"
 PROFILE_STEP_TARGETS="${PROFILE_STEP_TARGETS:-}" # e.g. "4=24000,3=20000,2=16000,1=12000"
 PROFILE_TRIALS="${PROFILE_TRIALS:-5}"
+PROFILE_WARMUP_TRIALS="${PROFILE_WARMUP_TRIALS:-2}"
 PROFILE_RUN_DURATION="${PROFILE_RUN_DURATION:-60}"
 FLAKY_FIXED_THROUGHPUT="${FLAKY_FIXED_THROUGHPUT:-}"
 FLAKY_TRIALS="${FLAKY_TRIALS:-5}"
@@ -87,6 +88,10 @@ append_log() {
 
 is_positive_int() {
     [[ "$1" =~ ^[1-9][0-9]*$ ]]
+}
+
+is_non_negative_int() {
+    [[ "$1" =~ ^[0-9]+$ ]]
 }
 
 step_target_override() {
@@ -429,8 +434,8 @@ run_profile_step() {
     local step_label
     local step_dir
     local run_log
+    local total_trials
     local rc
-    local ext_line
     local trial_lines
     local trial_line
     local obs_thr
@@ -445,14 +450,19 @@ run_profile_step() {
     local trial_mean_lat
     local trial_median_lat
     local trial_p99_lat
+    local -a kept_trial_thrs=()
+    local -a kept_trial_mean_lats=()
+    local -a kept_trial_median_lats=()
+    local -a kept_trial_p99_lats=()
 
     step_label="$(format_step_label "$step")"
     step_dir="${OUT_DIR}/${SLOWDOWN_TYPE}_${step_label}"
     run_log="${step_dir}/run.log"
+    total_trials=$((PROFILE_WARMUP_TRIALS + PROFILE_TRIALS))
 
     mkdir -p "$step_dir"
     : > "$run_log"
-    append_log "$run_log" "Starting slowdown-profile step ${step_label}: target throughput ${fixed_target} ops/s, trials=${PROFILE_TRIALS}, duration=${PROFILE_RUN_DURATION}s"
+    append_log "$run_log" "Starting slowdown-profile step ${step_label}: target throughput ${fixed_target} ops/s, warmup_trials=${PROFILE_WARMUP_TRIALS}, measured_trials=${PROFILE_TRIALS}, total_trials=${total_trials}, duration=${PROFILE_RUN_DURATION}s"
 
     if [[ "$RESTORE_BEFORE_STEP" == "true" ]]; then
         append_log "$run_log" "Restoring snapshot '${SNAPSHOT_NAME}' before step ${step_label}"
@@ -474,7 +484,7 @@ run_profile_step() {
         THROUGHPUT_MODE="single" \
         WORKLOAD_TARGET="$fixed_target" \
         RUN_DURATION="$PROFILE_RUN_DURATION" \
-        SINGLE_TRIALS="$PROFILE_TRIALS" \
+        SINGLE_TRIALS="$total_trials" \
         MAX_TRIAL_ATTEMPTS="$MAX_TRIAL_ATTEMPTS" \
         THREAD_COUNT="$THREAD_COUNT" \
         RECORD_COUNT="$RECORD_COUNT" \
@@ -494,25 +504,9 @@ run_profile_step() {
         return 1
     fi
 
-    ext_line="$(grep '^RESULTS_EXT:' "$run_log" | tail -n1 || true)"
-    if [[ -z "$ext_line" ]]; then
-        append_log "$run_log" "Missing RESULTS_EXT for step ${step_label}"
-        FAILED_STEPS+=("${step_label}:parse")
-        return 1
-    fi
-    IFS=',' read -r obs_thr _ mean_lat median_lat p99_lat <<< "${ext_line#RESULTS_EXT:}"
-    if [[ -z "${obs_thr:-}" || -z "${mean_lat:-}" || -z "${median_lat:-}" || -z "${p99_lat:-}" ]]; then
-        append_log "$run_log" "Malformed RESULTS_EXT for step ${step_label}: ${ext_line}"
-        FAILED_STEPS+=("${step_label}:parse")
-        return 1
-    fi
-
-    printf "%s,%s,%s,%s,%s,%s,%s,%s,%s\n" \
-        "$SLOWDOWN_TYPE" "$step" "$step_label" "$LATENCY_TARGET_MS" "$fixed_target" "$obs_thr" "$mean_lat" "$median_lat" "$p99_lat" >> "$MODE_SUMMARY_CSV"
-
     trial_lines="$(grep '^TRIAL_RESULT:single,' "$run_log" | tail -n "$PROFILE_TRIALS" || true)"
     if [[ -z "$trial_lines" ]]; then
-        append_log "$run_log" "Missing per-trial TRIAL_RESULT lines for step ${step_label}"
+        append_log "$run_log" "Missing per-trial TRIAL_RESULT lines for step ${step_label} (expected ${PROFILE_TRIALS} measured trials)"
         FAILED_STEPS+=("${step_label}:trial_parse")
         return 1
     fi
@@ -525,11 +519,29 @@ run_profile_step() {
             FAILED_STEPS+=("${step_label}:trial_parse")
             return 1
         fi
+        kept_trial_thrs+=("$trial_thr")
+        kept_trial_mean_lats+=("$trial_mean_lat")
+        kept_trial_median_lats+=("$trial_median_lat")
+        kept_trial_p99_lats+=("$trial_p99_lat")
         printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" \
             "$SLOWDOWN_TYPE" "$step" "$step_label" "$LATENCY_TARGET_MS" "$fixed_target" "$trial_idx" "$trial_thr" "$trial_mean_lat" "$trial_median_lat" "$trial_p99_lat" >> "$MODE_TRIALS_CSV"
     done <<< "$trial_lines"
 
-    append_log "$run_log" "Completed step ${step_label}: observed_thr=${obs_thr}, mean_lat_us=${mean_lat}, median_lat_us=${median_lat}, p99_lat_us=${p99_lat}"
+    if [[ "${#kept_trial_thrs[@]}" -ne "$PROFILE_TRIALS" ]]; then
+        append_log "$run_log" "Expected ${PROFILE_TRIALS} measured trials for step ${step_label}, got ${#kept_trial_thrs[@]}"
+        FAILED_STEPS+=("${step_label}:trial_count")
+        return 1
+    fi
+
+    obs_thr="$(mean_of "${kept_trial_thrs[@]}")"
+    mean_lat="$(mean_of "${kept_trial_mean_lats[@]}")"
+    median_lat="$(median_of "${kept_trial_median_lats[@]}")"
+    p99_lat="$(mean_of "${kept_trial_p99_lats[@]}")"
+
+    printf "%s,%s,%s,%s,%s,%s,%s,%s,%s\n" \
+        "$SLOWDOWN_TYPE" "$step" "$step_label" "$LATENCY_TARGET_MS" "$fixed_target" "$obs_thr" "$mean_lat" "$median_lat" "$p99_lat" >> "$MODE_SUMMARY_CSV"
+
+    append_log "$run_log" "Completed step ${step_label}: observed_thr=${obs_thr}, mean_lat_us=${mean_lat}, median_lat_us=${median_lat}, p99_lat_us=${p99_lat} (discarded warmup trials=${PROFILE_WARMUP_TRIALS})"
     return 0
 }
 
@@ -752,6 +764,9 @@ main() {
             die "All numeric controls must be positive integers. Bad value: $v"
         fi
     done
+    if ! is_non_negative_int "$PROFILE_WARMUP_TRIALS"; then
+        die "PROFILE_WARMUP_TRIALS must be a non-negative integer"
+    fi
 
     if (( MIN_THROUGHPUT > MAX_THROUGHPUT )); then
         die "MIN_THROUGHPUT must be <= MAX_THROUGHPUT"
@@ -840,7 +855,7 @@ main() {
             MODE_TRIALS_CSV="${OUT_DIR}/${SLOWDOWN_TYPE}_slowdown_profile_trials.csv"
             printf "slowdown_type,step_value,step_label,latency_target_ms,fixed_target_throughput,trial_index,observed_throughput_ops_s,mean_latency_us,median_latency_us,p99_latency_us\n" > "$MODE_TRIALS_CSV"
 
-            log "Slowdown-profile mode=${SLOWDOWN_TYPE}, latency_target=${LATENCY_TARGET_MS}ms, baseline_target=${baseline_target_for_log}, fixed_target=${fixed_target:-per-step}, factor=${PROFILE_TARGET_FACTOR}, trials=${PROFILE_TRIALS}, duration=${PROFILE_RUN_DURATION}s, steps=${steps[*]}"
+            log "Slowdown-profile mode=${SLOWDOWN_TYPE}, latency_target=${LATENCY_TARGET_MS}ms, baseline_target=${baseline_target_for_log}, fixed_target=${fixed_target:-per-step}, warmup_trials=${PROFILE_WARMUP_TRIALS}, measured_trials=${PROFILE_TRIALS}, duration=${PROFILE_RUN_DURATION}s, steps=${steps[*]}"
 
             for step in "${steps[@]}"; do
                 local step_target
