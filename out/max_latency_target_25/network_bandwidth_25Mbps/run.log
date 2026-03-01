@@ -1,176 +1,346 @@
-[2026-02-25 14:37:31] Starting step 25Mbps for latency target 25ms
-[2026-02-25 14:37:31] Restoring snapshot 'baseline' before step 25Mbps
-[2026-02-25 14:37:31] Restoring snapshot 'baseline'
-[2026-02-25 14:37:31] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
-[2026-02-25 14:37:34] Cluster teardown complete
-[2026-02-25 14:37:34] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
-[2026-02-25 14:37:34] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
-[2026-02-25 14:37:34] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
-[2026-02-25 14:37:37] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
-[2026-02-25 14:38:37] CQL ready on ccl1.cyber.lab (cassandra-node-1)
-[2026-02-25 14:38:38] Node 10.255.221.67 on ccl1.cyber.lab is UN
-[2026-02-25 14:38:38] Starting non-seed nodes serially for stable bootstrap
-[2026-02-25 14:38:38] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
-[2026-02-25 14:38:59] CQL ready on ccl2.cyber.lab (cassandra-node-2)
-[2026-02-25 14:39:00] Node 10.255.93.19 on ccl2.cyber.lab is UN
-[2026-02-25 14:39:00] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
-[2026-02-25 14:39:21] CQL ready on ccl3.cyber.lab (cassandra-node-3)
-[2026-02-25 14:39:22] Node 10.255.91.7 on ccl3.cyber.lab is UN
-[2026-02-25 14:39:23] Schema available on all nodes
-[2026-02-25 14:39:23] Snapshot 'baseline' restore complete
-[2026-02-25 14:39:23] Running mode=search, slowdown_type=network, step=25, client_type=hybrid
-[2026-02-25 14:39:26] Warming up cluster with 5 lightweight CQL probe(s) per node
-[2026-02-25 14:39:36] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 25mbit egress+ingress via ens18/ifbccl1
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 14:39:37] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 14:39:38] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 14:39:40] Max-throughput binary search: step=25 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[2000,512000]
-[2026-02-25 14:39:40] Eval 1: phase=find target=32000 trials=3 duration=30s
-[2026-02-25 14:39:40] Benchmark run: phase=find step=25 target=32000 duration=30s trial=1 attempt=1
-[2026-02-25 14:44:11] Benchmark run: phase=find step=25 target=32000 duration=30s trial=2 attempt=1
-[2026-02-25 14:48:38] Benchmark run: phase=find step=25 target=32000 duration=30s trial=3 attempt=1
-[2026-02-25 14:53:06] Eval 1 result: target=32000 avg_thr=31911.0484 median_lat_us=80292918.2050 pass=false status=ok
-[2026-02-25 14:53:06] Eval 2: phase=find target=16500 trials=3 duration=30s
-[2026-02-25 14:53:06] Benchmark run: phase=find step=25 target=16500 duration=30s trial=1 attempt=1
-[2026-02-25 14:56:07] Benchmark run: phase=find step=25 target=16500 duration=30s trial=2 attempt=1
-[2026-02-25 14:59:11] Benchmark run: phase=find step=25 target=16500 duration=30s trial=3 attempt=1
-[2026-02-25 15:02:18] Eval 2 result: target=16500 avg_thr=16308.3606 median_lat_us=36477948.5901 pass=false status=ok
-[2026-02-25 15:02:18] Eval 3: phase=find target=9000 trials=3 duration=30s
-[2026-02-25 15:02:18] Benchmark run: phase=find step=25 target=9000 duration=30s trial=1 attempt=1
-[2026-02-25 15:04:32] Benchmark run: phase=find step=25 target=9000 duration=30s trial=2 attempt=1
-[2026-02-25 15:06:45] Benchmark run: phase=find step=25 target=9000 duration=30s trial=3 attempt=1
-[2026-02-25 15:09:00] Eval 3 result: target=9000 avg_thr=8718.5269 median_lat_us=13066265.5425 pass=false status=ok
-[2026-02-25 15:09:00] Eval 4: phase=find target=5000 trials=3 duration=30s
-[2026-02-25 15:09:00] Benchmark run: phase=find step=25 target=5000 duration=30s trial=1 attempt=1
-[2026-02-25 15:10:29] Benchmark run: phase=find step=25 target=5000 duration=30s trial=2 attempt=1
-[2026-02-25 15:11:59] Benchmark run: phase=find step=25 target=5000 duration=30s trial=3 attempt=1
-[2026-02-25 15:13:28] Eval 4 result: target=5000 avg_thr=4946.2792 median_lat_us=381287.2525 pass=false status=ok
-[2026-02-25 15:13:28] Eval 5: phase=find target=3000 trials=3 duration=30s
-[2026-02-25 15:13:28] Benchmark run: phase=find step=25 target=3000 duration=30s trial=1 attempt=1
-[2026-02-25 15:14:34] Benchmark run: phase=find step=25 target=3000 duration=30s trial=2 attempt=1
-[2026-02-25 15:15:40] Benchmark run: phase=find step=25 target=3000 duration=30s trial=3 attempt=1
-[2026-02-25 15:16:45] Eval 5 result: target=3000 avg_thr=2970.6975 median_lat_us=2299.4855 pass=true status=ok
-[2026-02-25 15:16:45] Eval 6: phase=find target=4000 trials=3 duration=30s
-[2026-02-25 15:16:45] Benchmark run: phase=find step=25 target=4000 duration=30s trial=1 attempt=1
-[2026-02-25 15:18:02] Benchmark run: phase=find step=25 target=4000 duration=30s trial=2 attempt=1
-[2026-02-25 15:19:20] Benchmark run: phase=find step=25 target=4000 duration=30s trial=3 attempt=1
-[2026-02-25 15:20:38] Eval 6 result: target=4000 avg_thr=3956.9882 median_lat_us=5635.3472 pass=true status=ok
-[2026-02-25 15:20:38] Eval 7: phase=find target=4500 trials=3 duration=30s
-[2026-02-25 15:20:38] Benchmark run: phase=find step=25 target=4500 duration=30s trial=1 attempt=1
-[2026-02-25 15:21:58] Benchmark run: phase=find step=25 target=4500 duration=30s trial=2 attempt=1
-[2026-02-25 15:23:22] Benchmark run: phase=find step=25 target=4500 duration=30s trial=3 attempt=1
-[2026-02-25 15:24:46] Eval 7 result: target=4500 avg_thr=4456.0742 median_lat_us=8671.0614 pass=true status=ok
-[2026-02-25 15:24:46] Refining search upward: best_median_latency_us=8671.0614 is farther than 250us from target
-[2026-02-25 15:24:46] Validating candidate throughput=4500 with 5 trial(s)
-[2026-02-25 15:24:46] Eval 8: phase=validate target=4500 trials=5 duration=90s
-[2026-02-25 15:24:46] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=1 attempt=1
-[2026-02-25 15:27:37] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=2 attempt=1
-[2026-02-25 15:30:28] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=3 attempt=1
-[2026-02-25 15:33:21] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=4 attempt=1
-[2026-02-25 15:36:10] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=5 attempt=1
-[2026-02-25 15:39:03] Eval 8 result: target=4500 avg_thr=4474.8131 median_lat_us=12904.2766 pass=true status=ok
-[2026-02-25 15:39:03] Validated median latency is still far below target, probing higher targets (max 6)
-[2026-02-25 15:39:03] Eval 9: phase=validate_climb target=5000 trials=5 duration=90s
-[2026-02-25 15:39:03] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=1 attempt=1
-[2026-02-25 15:41:56] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=2 attempt=1
-[2026-02-25 15:44:49] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=3 attempt=1
-[2026-02-25 15:47:42] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=4 attempt=1
-[2026-02-25 15:50:36] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=5 attempt=1
-[2026-02-25 15:53:29] Eval 9 result: target=5000 avg_thr=4967.0394 median_lat_us=1380123.9982 pass=false status=ok
-[2026-02-25 15:53:29] Search complete: slowdown_type=network step=25 max_target=4500 observed_throughput=4474.8131 observed_latency_us=12904.2766 validated=true
-MAX_RESULT:4500,4474.8131,12904.2766,true
-RESULTS:4474.8131,12904.2766
-[2026-02-25 15:53:31] Completed step 25Mbps: max_target=4500, observed_thr=4474.8131, observed_lat_us=12904.2766, validated=true
-[2026-02-25 20:50:09] Starting step 25Mbps for latency target 25ms
-[2026-02-25 20:50:09] Restoring snapshot 'baseline' before step 25Mbps
-[2026-02-25 20:50:09] Restoring snapshot 'baseline'
-[2026-02-25 20:50:09] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
-[2026-02-25 20:50:11] Cluster teardown complete
-[2026-02-25 20:50:11] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
-[2026-02-25 20:50:11] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
-[2026-02-25 20:50:11] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
-[2026-02-25 20:50:14] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
-[2026-02-25 20:51:15] CQL ready on ccl1.cyber.lab (cassandra-node-1)
-[2026-02-25 20:51:16] Node 10.255.221.67 on ccl1.cyber.lab is UN
-[2026-02-25 20:51:16] Starting non-seed nodes serially for stable bootstrap
-[2026-02-25 20:51:16] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
-[2026-02-25 20:51:36] CQL ready on ccl2.cyber.lab (cassandra-node-2)
-[2026-02-25 20:51:38] Node 10.255.93.19 on ccl2.cyber.lab is UN
-[2026-02-25 20:51:38] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
-[2026-02-25 20:51:57] CQL ready on ccl3.cyber.lab (cassandra-node-3)
-[2026-02-25 20:51:58] Node 10.255.91.7 on ccl3.cyber.lab is UN
-[2026-02-25 20:52:00] Schema available on all nodes
-[2026-02-25 20:52:00] Snapshot 'baseline' restore complete
-[2026-02-25 20:52:00] Running mode=search, slowdown_type=network, step=25, client_type=hybrid
-[2026-02-25 20:52:02] Warming up cluster with 5 lightweight CQL probe(s) per node
-[2026-02-25 20:52:12] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 25mbit egress+ingress via ens18/ifbccl1
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 20:52:13] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 20:52:14] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
-Warning: sch_htb: quantum of class 10010 is big. Consider r2q change.
-Warning: sch_htb: quantum of class 20010 is big. Consider r2q change.
-[2026-02-25 20:52:17] Max-throughput binary search: step=25 latency_target_ms=25 (latency_target_us=25000.0000) bounds=[1,512000]
-[2026-02-25 20:52:17] Eval 1: phase=find target=32000 trials=3 duration=30s
-[2026-02-25 20:52:17] Benchmark run: phase=find step=25 target=32000 duration=30s trial=1 attempt=1
-[2026-02-25 20:56:49] Benchmark run: phase=find step=25 target=32000 duration=30s trial=2 attempt=1
-[2026-02-25 21:01:19] Benchmark run: phase=find step=25 target=32000 duration=30s trial=3 attempt=1
-[2026-02-25 21:05:48] Eval 1 result: target=32000 avg_thr=31564.2857 median_lat_us=81176593.6735 pass=false status=ok
-[2026-02-25 21:05:48] Eval 2: phase=find target=15500 trials=3 duration=30s
-[2026-02-25 21:05:48] Benchmark run: phase=find step=25 target=15500 duration=30s trial=1 attempt=1
-[2026-02-25 21:08:44] Benchmark run: phase=find step=25 target=15500 duration=30s trial=2 attempt=1
-[2026-02-25 21:11:41] Benchmark run: phase=find step=25 target=15500 duration=30s trial=3 attempt=1
-[2026-02-25 21:14:41] Eval 2 result: target=15500 avg_thr=15456.9219 median_lat_us=32905959.1692 pass=false status=ok
-[2026-02-25 21:14:41] Eval 3: phase=find target=7500 trials=3 duration=30s
-[2026-02-25 21:14:41] Benchmark run: phase=find step=25 target=7500 duration=30s trial=1 attempt=1
-[2026-02-25 21:16:47] Benchmark run: phase=find step=25 target=7500 duration=30s trial=2 attempt=1
-[2026-02-25 21:18:53] Benchmark run: phase=find step=25 target=7500 duration=30s trial=3 attempt=1
-[2026-02-25 21:21:00] Eval 3 result: target=7500 avg_thr=7437.7631 median_lat_us=8002949.6560 pass=false status=ok
-[2026-02-25 21:21:00] Eval 4: phase=find target=3500 trials=3 duration=30s
-[2026-02-25 21:21:00] Benchmark run: phase=find step=25 target=3500 duration=30s trial=1 attempt=1
-[2026-02-25 21:22:12] Benchmark run: phase=find step=25 target=3500 duration=30s trial=2 attempt=1
-[2026-02-25 21:23:24] Benchmark run: phase=find step=25 target=3500 duration=30s trial=3 attempt=1
-[2026-02-25 21:24:38] Eval 4 result: target=3500 avg_thr=3433.3412 median_lat_us=2123.7873 pass=true status=ok
-[2026-02-25 21:24:38] Eval 5: phase=find target=5500 trials=3 duration=30s
-[2026-02-25 21:24:38] Benchmark run: phase=find step=25 target=5500 duration=30s trial=1 attempt=1
-[2026-02-25 21:26:17] Benchmark run: phase=find step=25 target=5500 duration=30s trial=2 attempt=1
-[2026-02-25 21:27:54] Benchmark run: phase=find step=25 target=5500 duration=30s trial=3 attempt=1
-[2026-02-25 21:29:33] Eval 5 result: target=5500 avg_thr=5346.7849 median_lat_us=1517541.8085 pass=false status=ok
-[2026-02-25 21:29:33] Eval 6: phase=find target=4500 trials=3 duration=30s
-[2026-02-25 21:29:33] Benchmark run: phase=find step=25 target=4500 duration=30s trial=1 attempt=1
-[2026-02-25 21:30:57] Benchmark run: phase=find step=25 target=4500 duration=30s trial=2 attempt=1
-[2026-02-25 21:32:22] Benchmark run: phase=find step=25 target=4500 duration=30s trial=3 attempt=1
-[2026-02-25 21:33:46] Eval 6 result: target=4500 avg_thr=4504.4667 median_lat_us=9670.4753 pass=true status=ok
-[2026-02-25 21:33:46] Eval 7: phase=find target=5000 trials=3 duration=30s
-[2026-02-25 21:33:46] Benchmark run: phase=find step=25 target=5000 duration=30s trial=1 attempt=1
-[2026-02-25 21:35:17] Benchmark run: phase=find step=25 target=5000 duration=30s trial=2 attempt=1
-[2026-02-25 21:36:48] Benchmark run: phase=find step=25 target=5000 duration=30s trial=3 attempt=1
-[2026-02-25 21:38:17] Eval 7 result: target=5000 avg_thr=4892.4717 median_lat_us=550241.0884 pass=false status=ok
-[2026-02-25 21:38:17] Refining search upward: best_median_latency_us=9670.4753 is farther than 250us from target
-[2026-02-25 21:38:17] Validating candidate throughput=4500 with 5 trial(s)
-[2026-02-25 21:38:17] Eval 8: phase=validate target=4500 trials=5 duration=90s
-[2026-02-25 21:38:17] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=1 attempt=1
-[2026-02-25 21:41:09] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=2 attempt=1
-[2026-02-25 21:44:00] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=3 attempt=1
-[2026-02-25 21:46:52] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=4 attempt=1
-[2026-02-25 21:49:43] Benchmark run: phase=validate step=25 target=4500 duration=90s trial=5 attempt=1
-[2026-02-25 21:52:32] Eval 8 result: target=4500 avg_thr=4474.8066 median_lat_us=7872.0208 pass=true status=ok
-[2026-02-25 21:52:32] Validated median latency is still far below target, probing higher targets (max 6)
-[2026-02-25 21:52:32] Eval 9: phase=validate_climb target=5000 trials=5 duration=90s
-[2026-02-25 21:52:32] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=1 attempt=1
-[2026-02-25 21:55:27] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=2 attempt=1
-[2026-02-25 21:58:22] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=3 attempt=1
-[2026-02-25 22:01:15] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=4 attempt=1
-[2026-02-25 22:04:08] Benchmark run: phase=validate_climb step=25 target=5000 duration=90s trial=5 attempt=1
-[2026-02-25 22:07:03] Eval 9 result: target=5000 avg_thr=4967.0350 median_lat_us=1756848.7059 pass=false status=ok
-[2026-02-25 22:07:03] Search complete: slowdown_type=network step=25 max_target=4500 observed_throughput=4474.8066 observed_latency_us=7872.0208 validated=true
-MAX_RESULT:4500,4474.8066,7872.0208,true
-RESULTS:4474.8066,7872.0208
-[2026-02-25 22:07:05] Completed step 25Mbps: max_target=4500, observed_thr=4474.8066, observed_lat_us=7872.0208, validated=true
+[2026-02-28 17:47:03] Starting slowdown-profile step 25Mbps: target throughput 5000 ops/s, trials=5, duration=60s
+[2026-02-28 17:47:03] Restoring snapshot 'baseline' before step 25Mbps
+[2026-02-28 17:47:03] Restoring snapshot 'baseline'
+[2026-02-28 17:47:03] Tearing down Cassandra containers/volumes on: ccl1.cyber.lab ccl2.cyber.lab ccl3.cyber.lab
+[2026-02-28 17:47:05] Cluster teardown complete
+[2026-02-28 17:47:05] Restoring ccl1.cyber.lab:cassandra-data-1 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-1.tar.gz
+[2026-02-28 17:47:05] Restoring ccl2.cyber.lab:cassandra-data-2 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-2.tar.gz
+[2026-02-28 17:47:05] Restoring ccl3.cyber.lab:cassandra-data-3 from /tmp/cassandra-bench-snapshots/baseline/cassandra-data-3.tar.gz
+[2026-02-28 17:47:08] Starting cassandra-node-1 on ccl1.cyber.lab (10.255.221.67) with seed 10.255.221.67
+[2026-02-28 17:48:05] CQL ready on ccl1.cyber.lab (cassandra-node-1)
+[2026-02-28 17:48:06] Node 10.255.221.67 on ccl1.cyber.lab is UN
+[2026-02-28 17:48:06] Starting non-seed nodes serially for stable bootstrap
+[2026-02-28 17:48:06] Starting cassandra-node-2 on ccl2.cyber.lab (10.255.93.19) with seed 10.255.221.67
+[2026-02-28 17:48:27] CQL ready on ccl2.cyber.lab (cassandra-node-2)
+[2026-02-28 17:48:28] Node 10.255.93.19 on ccl2.cyber.lab is UN
+[2026-02-28 17:48:28] Starting cassandra-node-3 on ccl3.cyber.lab (10.255.91.7) with seed 10.255.221.67
+[2026-02-28 17:48:46] CQL ready on ccl3.cyber.lab (cassandra-node-3)
+[2026-02-28 17:48:48] Node 10.255.91.7 on ccl3.cyber.lab is UN
+[2026-02-28 17:48:49] Schema available on all nodes
+[2026-02-28 17:48:49] Snapshot 'baseline' restore complete
+[2026-02-28 17:48:49] Running mode=single, slowdown_type=network, step=25, client_type=hybrid
+[2026-02-28 17:48:52] Warming up cluster with 5 lightweight CQL probe(s) per node
+[2026-02-28 17:49:02] Applying bandwidth limit on ccl1.cyber.lab (cassandra-node-1): 25mbit egress+ingress via ens18/ifbccl1
+[2026-02-28 17:49:03] Applying bandwidth limit on ccl2.cyber.lab (cassandra-node-2): 10000mbit egress+ingress via ens18/ifbccl2
+[2026-02-28 17:49:04] Applying bandwidth limit on ccl3.cyber.lab (cassandra-node-3): 10000mbit egress+ingress via ens18/ifbccl3
+[2026-02-28 17:49:07] Eval 1: phase=single target=5000 trials=5 duration=60s
+[2026-02-28 17:49:07] Benchmark run: phase=single step=25 target=5000 duration=60s trial=1 attempt=1
+TRIAL_SERIES:single,5000,1,1,4999.0000,92430.9224,77148.0000
+TRIAL_SERIES:single,5000,1,2,5001.0000,2938.6847,1612.0000
+TRIAL_SERIES:single,5000,1,3,5000.0000,1879.1952,1549.0000
+TRIAL_SERIES:single,5000,1,4,4999.0000,1548.6427,1360.0000
+TRIAL_SERIES:single,5000,1,5,5000.0000,1481.8590,1307.5000
+TRIAL_SERIES:single,5000,1,6,5001.0000,1692.4839,1284.0000
+TRIAL_SERIES:single,5000,1,7,4995.0000,3897.2398,1302.0000
+TRIAL_SERIES:single,5000,1,8,5005.0000,3712.4809,1269.0000
+TRIAL_SERIES:single,5000,1,9,5000.0000,3302.5186,1238.5000
+TRIAL_SERIES:single,5000,1,10,4997.0000,3409.6114,1246.0000
+TRIAL_SERIES:single,5000,1,11,5003.0000,3470.1267,1264.0000
+TRIAL_SERIES:single,5000,1,12,5000.0000,3447.2678,1246.0000
+TRIAL_SERIES:single,5000,1,13,4999.0000,3296.5465,1245.0000
+TRIAL_SERIES:single,5000,1,14,5000.0000,3035.1214,1211.0000
+TRIAL_SERIES:single,5000,1,15,5001.0000,3117.8228,1242.0000
+TRIAL_SERIES:single,5000,1,16,4998.0000,2918.2649,1229.0000
+TRIAL_SERIES:single,5000,1,17,5002.0000,2934.7515,1233.5000
+TRIAL_SERIES:single,5000,1,18,5000.0000,2638.4924,1258.0000
+TRIAL_SERIES:single,5000,1,19,4999.0000,3101.9400,1247.0000
+TRIAL_SERIES:single,5000,1,20,5001.0000,2476.2152,1246.0000
+TRIAL_SERIES:single,5000,1,21,4999.0000,2942.2539,1243.0000
+TRIAL_SERIES:single,5000,1,22,5000.0000,2721.2906,1245.0000
+TRIAL_SERIES:single,5000,1,23,5001.0000,2611.2374,1255.0000
+TRIAL_SERIES:single,5000,1,24,4999.0000,2302.2160,1267.0000
+TRIAL_SERIES:single,5000,1,25,5001.0000,2380.4419,1249.0000
+TRIAL_SERIES:single,5000,1,26,5000.0000,2451.1408,1249.0000
+TRIAL_SERIES:single,5000,1,27,5000.0000,2572.8882,1242.0000
+TRIAL_SERIES:single,5000,1,28,4999.0000,2289.0676,1222.0000
+TRIAL_SERIES:single,5000,1,29,5000.0000,2291.2584,1220.0000
+TRIAL_SERIES:single,5000,1,30,5001.0000,2155.7393,1230.0000
+TRIAL_SERIES:single,5000,1,31,5000.0000,2176.3620,1244.0000
+TRIAL_SERIES:single,5000,1,32,4999.0000,2186.3529,1246.0000
+TRIAL_SERIES:single,5000,1,33,4999.0000,2161.1770,1231.0000
+TRIAL_SERIES:single,5000,1,34,5001.0000,2132.0810,1238.0000
+TRIAL_SERIES:single,5000,1,35,5001.0000,2283.6793,1246.0000
+TRIAL_SERIES:single,5000,1,36,4997.0000,2159.6470,1293.0000
+TRIAL_SERIES:single,5000,1,37,5001.0000,2208.8386,1269.0000
+TRIAL_SERIES:single,5000,1,38,5002.0000,1900.2863,1257.5000
+TRIAL_SERIES:single,5000,1,39,5000.0000,2212.1144,1258.0000
+TRIAL_SERIES:single,5000,1,40,4998.0000,2059.1293,1252.5000
+TRIAL_SERIES:single,5000,1,41,5002.0000,2062.5484,1252.0000
+TRIAL_SERIES:single,5000,1,42,4999.0000,1991.6319,1244.0000
+TRIAL_SERIES:single,5000,1,43,5000.0000,2035.6384,1235.0000
+TRIAL_SERIES:single,5000,1,44,5000.0000,1985.7530,1223.5000
+TRIAL_SERIES:single,5000,1,45,5000.0000,1924.2690,1252.0000
+TRIAL_SERIES:single,5000,1,46,4999.0000,1782.2901,1246.0000
+TRIAL_SERIES:single,5000,1,47,5001.0000,1896.3025,1249.0000
+TRIAL_SERIES:single,5000,1,48,5000.0000,1972.6858,1267.0000
+TRIAL_SERIES:single,5000,1,49,5001.0000,1865.0616,1247.0000
+TRIAL_SERIES:single,5000,1,50,5000.0000,1869.5500,1231.0000
+TRIAL_SERIES:single,5000,1,51,4998.0000,1778.5370,1244.0000
+TRIAL_SERIES:single,5000,1,52,5002.0000,1759.6645,1248.0000
+TRIAL_SERIES:single,5000,1,53,5000.0000,1810.5880,1223.0000
+TRIAL_SERIES:single,5000,1,54,5000.0000,1752.6700,1235.0000
+TRIAL_SERIES:single,5000,1,55,5000.0000,1845.8202,1247.0000
+TRIAL_SERIES:single,5000,1,56,5000.0000,1891.4048,1293.0000
+TRIAL_SERIES:single,5000,1,57,5000.0000,1930.1156,1293.0000
+TRIAL_SERIES:single,5000,1,58,4999.0000,1760.2246,1259.0000
+TRIAL_SERIES:single,5000,1,59,5000.0000,1741.7692,1253.0000
+TRIAL_SERIES:single,5000,1,60,5001.0000,1799.6547,1258.0000
+TRIAL_SERIES:single,5000,1,61,1.0000,2455.0000,2455.0000
+TRIAL_RESULT:single,5000,1,4918.0492,1270.0000,3839.4160,1270.0000,52497.0000
+[2026-02-28 17:51:31] Benchmark run: phase=single step=25 target=5000 duration=60s trial=2 attempt=1
+TRIAL_SERIES:single,5000,2,1,4998.0000,25279.3870,1543.0000
+TRIAL_SERIES:single,5000,2,2,5002.0000,3349.4462,1324.5000
+TRIAL_SERIES:single,5000,2,3,4999.0000,1463.3207,1284.0000
+TRIAL_SERIES:single,5000,2,4,5000.0000,4304.4784,1273.0000
+TRIAL_SERIES:single,5000,2,5,5001.0000,4629.7540,1271.0000
+TRIAL_SERIES:single,5000,2,6,4999.0000,4484.1212,1251.0000
+TRIAL_SERIES:single,5000,2,7,5001.0000,4104.3867,1249.0000
+TRIAL_SERIES:single,5000,2,8,4999.0000,4072.5267,1246.0000
+TRIAL_SERIES:single,5000,2,9,5000.0000,3963.0408,1230.5000
+TRIAL_SERIES:single,5000,2,10,4998.0000,3645.4988,1244.0000
+TRIAL_SERIES:single,5000,2,11,5002.0000,3966.0386,1262.0000
+TRIAL_SERIES:single,5000,2,12,5001.0000,4129.7950,1248.0000
+TRIAL_SERIES:single,5000,2,13,4999.0000,4076.2603,1254.0000
+TRIAL_SERIES:single,5000,2,14,5001.0000,3601.4771,1253.0000
+TRIAL_SERIES:single,5000,2,15,4999.0000,3866.2517,1253.0000
+TRIAL_SERIES:single,5000,2,16,5001.0000,3871.9356,1219.0000
+TRIAL_SERIES:single,5000,2,17,5000.0000,3465.4986,1224.0000
+TRIAL_SERIES:single,5000,2,18,5000.0000,3262.9462,1242.0000
+TRIAL_SERIES:single,5000,2,19,4999.0000,3361.7449,1238.0000
+TRIAL_SERIES:single,5000,2,20,5000.0000,3910.3874,1222.0000
+TRIAL_SERIES:single,5000,2,21,5000.0000,3541.1338,1231.0000
+TRIAL_SERIES:single,5000,2,22,5001.0000,2795.7992,1215.0000
+TRIAL_SERIES:single,5000,2,23,4998.0000,3193.5354,1222.0000
+TRIAL_SERIES:single,5000,2,24,5001.0000,4155.3689,1228.0000
+TRIAL_SERIES:single,5000,2,25,5000.0000,3661.3016,1230.0000
+TRIAL_SERIES:single,5000,2,26,5001.0000,2941.6481,1241.0000
+TRIAL_SERIES:single,5000,2,27,4998.0000,3216.0534,1225.0000
+TRIAL_SERIES:single,5000,2,28,5001.0000,3119.8510,1216.0000
+TRIAL_SERIES:single,5000,2,29,4999.0000,3382.1310,1233.0000
+TRIAL_SERIES:single,5000,2,30,5001.0000,3641.3613,1235.0000
+TRIAL_SERIES:single,5000,2,31,5001.0000,3739.9392,1226.0000
+TRIAL_SERIES:single,5000,2,32,5000.0000,3130.0362,1220.0000
+TRIAL_SERIES:single,5000,2,33,4997.0000,3489.9155,1216.0000
+TRIAL_SERIES:single,5000,2,34,5003.0000,2981.3162,1209.0000
+TRIAL_SERIES:single,5000,2,35,5000.0000,3052.0960,1235.0000
+TRIAL_SERIES:single,5000,2,36,5000.0000,3093.5792,1234.0000
+TRIAL_SERIES:single,5000,2,37,5000.0000,3462.1838,1290.0000
+TRIAL_SERIES:single,5000,2,38,5000.0000,2986.5728,1228.0000
+TRIAL_SERIES:single,5000,2,39,4998.0000,3063.3205,1238.0000
+TRIAL_SERIES:single,5000,2,40,5002.0000,2594.7157,1242.0000
+TRIAL_SERIES:single,5000,2,41,4999.0000,2867.8866,1253.0000
+TRIAL_SERIES:single,5000,2,42,5001.0000,3671.5751,1237.0000
+TRIAL_SERIES:single,5000,2,43,5000.0000,2989.6188,1234.5000
+TRIAL_SERIES:single,5000,2,44,5000.0000,2711.0090,1232.5000
+TRIAL_SERIES:single,5000,2,45,5000.0000,2715.8284,1248.0000
+TRIAL_SERIES:single,5000,2,46,5000.0000,2687.5932,1243.5000
+TRIAL_SERIES:single,5000,2,47,4999.0000,2805.7636,1235.0000
+TRIAL_SERIES:single,5000,2,48,5001.0000,2571.9772,1246.0000
+TRIAL_SERIES:single,5000,2,49,4999.0000,2520.3453,1244.0000
+TRIAL_SERIES:single,5000,2,50,5000.0000,2634.0816,1242.0000
+TRIAL_SERIES:single,5000,2,51,5000.0000,2915.7368,1255.0000
+TRIAL_SERIES:single,5000,2,52,4999.0000,3013.4835,1250.0000
+TRIAL_SERIES:single,5000,2,53,5001.0000,3124.3517,1246.0000
+TRIAL_SERIES:single,5000,2,54,5001.0000,2330.0914,1269.0000
+TRIAL_SERIES:single,5000,2,55,5000.0000,2487.5546,1246.0000
+TRIAL_SERIES:single,5000,2,56,5000.0000,2755.5422,1255.0000
+TRIAL_SERIES:single,5000,2,57,5000.0000,2900.5888,1260.5000
+TRIAL_SERIES:single,5000,2,58,4999.0000,3054.2949,1238.0000
+TRIAL_SERIES:single,5000,2,59,5001.0000,2447.5139,1228.0000
+TRIAL_SERIES:single,5000,2,60,4996.0000,2611.5815,1239.5000
+TRIAL_SERIES:single,5000,2,61,0.0000,0.0000,0.0000
+TRIAL_RESULT:single,5000,2,4999.9333,1246.0000,3630.9812,1246.0000,16225.0000
+[2026-02-28 17:53:54] Benchmark run: phase=single step=25 target=5000 duration=60s trial=3 attempt=1
+TRIAL_SERIES:single,5000,3,1,5000.0000,2095.6492,1244.0000
+TRIAL_SERIES:single,5000,3,2,5000.0000,1341.3854,1253.0000
+TRIAL_SERIES:single,5000,3,3,5000.0000,1311.1254,1230.0000
+TRIAL_SERIES:single,5000,3,4,4999.0000,1656.3391,1326.0000
+TRIAL_SERIES:single,5000,3,5,5000.0000,1369.4486,1295.0000
+TRIAL_SERIES:single,5000,3,6,4999.0000,1560.2404,1265.0000
+TRIAL_SERIES:single,5000,3,7,5001.0000,1369.0518,1216.0000
+TRIAL_SERIES:single,5000,3,8,5001.0000,3611.4285,1256.0000
+TRIAL_SERIES:single,5000,3,9,5000.0000,3981.4990,1233.0000
+TRIAL_SERIES:single,5000,3,10,5000.0000,4093.2540,1264.0000
+TRIAL_SERIES:single,5000,3,11,5000.0000,3832.7858,1261.5000
+TRIAL_SERIES:single,5000,3,12,4999.0000,4442.8838,1259.0000
+TRIAL_SERIES:single,5000,3,13,5001.0000,4800.8080,1273.0000
+TRIAL_SERIES:single,5000,3,14,5000.0000,3457.2146,1260.5000
+TRIAL_SERIES:single,5000,3,15,5000.0000,3364.9280,1259.0000
+TRIAL_SERIES:single,5000,3,16,4999.0000,3506.7610,1279.0000
+TRIAL_SERIES:single,5000,3,17,5001.0000,3585.8838,1267.0000
+TRIAL_SERIES:single,5000,3,18,5000.0000,3604.2448,1251.0000
+TRIAL_SERIES:single,5000,3,19,5000.0000,4075.0898,1267.0000
+TRIAL_SERIES:single,5000,3,20,4997.0000,4171.1959,1283.0000
+TRIAL_SERIES:single,5000,3,21,5003.0000,3959.7196,1283.0000
+TRIAL_SERIES:single,5000,3,22,4999.0000,3739.6455,1286.0000
+TRIAL_SERIES:single,5000,3,23,5000.0000,3189.9894,1288.0000
+TRIAL_SERIES:single,5000,3,24,5001.0000,3293.2755,1299.0000
+TRIAL_SERIES:single,5000,3,25,5000.0000,3086.0032,1293.0000
+TRIAL_SERIES:single,5000,3,26,5000.0000,3469.1992,1311.0000
+TRIAL_SERIES:single,5000,3,27,5000.0000,3531.1032,1309.0000
+TRIAL_SERIES:single,5000,3,28,5000.0000,3222.4382,1298.0000
+TRIAL_SERIES:single,5000,3,29,4999.0000,3547.7199,1285.0000
+TRIAL_SERIES:single,5000,3,30,5001.0000,3408.4359,1292.0000
+TRIAL_SERIES:single,5000,3,31,4999.0000,2989.8928,1272.0000
+TRIAL_SERIES:single,5000,3,32,5001.0000,2748.2673,1272.0000
+TRIAL_SERIES:single,5000,3,33,5000.0000,3297.4100,1251.0000
+TRIAL_SERIES:single,5000,3,34,5000.0000,3057.0774,1268.0000
+TRIAL_SERIES:single,5000,3,35,4998.0000,2768.1835,1287.0000
+TRIAL_SERIES:single,5000,3,36,5002.0000,18604.3954,1328.5000
+TRIAL_SERIES:single,5000,3,37,4999.0000,265177.2855,244307.0000
+TRIAL_SERIES:single,5000,3,38,5001.0000,388704.8666,360419.0000
+TRIAL_SERIES:single,5000,3,39,4995.0000,514781.1986,488236.0000
+TRIAL_SERIES:single,5000,3,40,5005.0000,621560.6320,584281.0000
+TRIAL_SERIES:single,5000,3,41,4999.0000,584182.5083,556185.0000
+TRIAL_SERIES:single,5000,3,42,4999.0000,514845.6511,484223.0000
+TRIAL_SERIES:single,5000,3,43,5002.0000,448126.8443,418272.0000
+TRIAL_SERIES:single,5000,3,44,4999.0000,383528.4483,350896.0000
+TRIAL_SERIES:single,5000,3,45,4999.0000,316647.4575,287569.0000
+TRIAL_SERIES:single,5000,3,46,4999.0000,254022.2398,224113.0000
+TRIAL_SERIES:single,5000,3,47,5001.0000,187260.5515,156430.0000
+TRIAL_SERIES:single,5000,3,48,5002.0000,122733.1869,90360.5000
+TRIAL_SERIES:single,5000,3,49,5000.0000,57221.4064,21912.5000
+TRIAL_SERIES:single,5000,3,50,5000.0000,28818.4538,1490.0000
+TRIAL_SERIES:single,5000,3,51,5000.0000,12110.4758,1364.0000
+TRIAL_SERIES:single,5000,3,52,4999.0000,3313.4537,1210.0000
+TRIAL_SERIES:single,5000,3,53,5001.0000,2427.8626,1201.0000
+TRIAL_SERIES:single,5000,3,54,5000.0000,2601.9272,1219.0000
+TRIAL_SERIES:single,5000,3,55,5000.0000,2607.8736,1216.0000
+TRIAL_SERIES:single,5000,3,56,5000.0000,2548.8550,1220.0000
+TRIAL_SERIES:single,5000,3,57,5000.0000,2188.0248,1227.0000
+TRIAL_SERIES:single,5000,3,58,4998.0000,2496.1389,1216.0000
+TRIAL_SERIES:single,5000,3,59,5002.0000,2444.9672,1207.0000
+TRIAL_SERIES:single,5000,3,60,4999.0000,2376.9986,1215.0000
+TRIAL_SERIES:single,5000,3,61,3.0000,1959.0000,1224.0000
+TRIAL_RESULT:single,5000,3,4918.0656,1484.0000,80863.8759,1484.0000,670106.0000
+[2026-02-28 17:56:20] Benchmark run: phase=single step=25 target=5000 duration=60s trial=4 attempt=1
+TRIAL_SERIES:single,5000,4,1,5000.0000,244712.0630,275796.0000
+TRIAL_SERIES:single,5000,4,2,4999.0000,140541.1612,138134.0000
+TRIAL_SERIES:single,5000,4,3,5001.0000,6756.1880,1295.0000
+TRIAL_SERIES:single,5000,4,4,5000.0000,3935.9324,1218.0000
+TRIAL_SERIES:single,5000,4,5,4999.0000,3980.7455,1224.0000
+TRIAL_SERIES:single,5000,4,6,5001.0000,4132.2184,1223.0000
+TRIAL_SERIES:single,5000,4,7,5000.0000,3538.5988,1231.0000
+TRIAL_SERIES:single,5000,4,8,4999.0000,4036.7099,1230.0000
+TRIAL_SERIES:single,5000,4,9,5001.0000,3932.7201,1230.0000
+TRIAL_SERIES:single,5000,4,10,4998.0000,4274.1192,1241.5000
+TRIAL_SERIES:single,5000,4,11,5002.0000,3726.1399,1204.0000
+TRIAL_SERIES:single,5000,4,12,5000.0000,3682.0330,1206.0000
+TRIAL_SERIES:single,5000,4,13,5000.0000,4081.9092,1206.0000
+TRIAL_SERIES:single,5000,4,14,4998.0000,4169.0750,1231.0000
+TRIAL_SERIES:single,5000,4,15,5000.0000,3830.4378,1240.5000
+TRIAL_SERIES:single,5000,4,16,5001.0000,2906.7259,1192.0000
+TRIAL_SERIES:single,5000,4,17,5000.0000,3256.2722,1201.5000
+TRIAL_SERIES:single,5000,4,18,5001.0000,3136.1970,1213.0000
+TRIAL_SERIES:single,5000,4,19,5000.0000,3949.0162,1212.0000
+TRIAL_SERIES:single,5000,4,20,4999.0000,3882.1534,1221.0000
+TRIAL_SERIES:single,5000,4,21,5001.0000,4182.6681,1219.0000
+TRIAL_SERIES:single,5000,4,22,5000.0000,3762.7128,1215.0000
+TRIAL_SERIES:single,5000,4,23,4999.0000,3067.1062,1211.0000
+TRIAL_SERIES:single,5000,4,24,5001.0000,3660.8728,1205.0000
+TRIAL_SERIES:single,5000,4,25,5000.0000,2952.7946,1204.0000
+TRIAL_SERIES:single,5000,4,26,4997.0000,3198.9438,1230.0000
+TRIAL_SERIES:single,5000,4,27,5002.0000,3678.6553,1223.5000
+TRIAL_SERIES:single,5000,4,28,5001.0000,3585.4581,1245.0000
+TRIAL_SERIES:single,5000,4,29,4999.0000,3477.9644,1212.0000
+TRIAL_SERIES:single,5000,4,30,4999.0000,3410.0376,1227.0000
+TRIAL_SERIES:single,5000,4,31,5001.0000,4765.8922,1244.0000
+TRIAL_SERIES:single,5000,4,32,5000.0000,3983.5062,1215.0000
+TRIAL_SERIES:single,5000,4,33,5001.0000,2960.5663,1200.0000
+TRIAL_SERIES:single,5000,4,34,5000.0000,2934.0528,1206.0000
+TRIAL_SERIES:single,5000,4,35,5000.0000,3178.2174,1207.0000
+TRIAL_SERIES:single,5000,4,36,5000.0000,2978.2044,1226.0000
+TRIAL_SERIES:single,5000,4,37,4998.0000,3638.2083,1233.0000
+TRIAL_SERIES:single,5000,4,38,5001.0000,2954.6903,1229.0000
+TRIAL_SERIES:single,5000,4,39,5000.0000,3874.8232,1253.5000
+TRIAL_SERIES:single,5000,4,40,4999.0000,3160.5629,1198.0000
+TRIAL_SERIES:single,5000,4,41,5002.0000,3254.7581,1231.0000
+TRIAL_SERIES:single,5000,4,42,5000.0000,2824.2474,1207.0000
+TRIAL_SERIES:single,5000,4,43,4997.0000,3202.0354,1206.0000
+TRIAL_SERIES:single,5000,4,44,5001.0000,3348.0406,1202.0000
+TRIAL_SERIES:single,5000,4,45,5001.0000,2757.6163,1231.0000
+TRIAL_SERIES:single,5000,4,46,5001.0000,2865.4301,1214.0000
+TRIAL_SERIES:single,5000,4,47,5000.0000,2677.1602,1207.0000
+TRIAL_SERIES:single,5000,4,48,4999.0000,2514.0826,1207.0000
+TRIAL_SERIES:single,5000,4,49,5001.0000,2689.3309,1233.0000
+TRIAL_SERIES:single,5000,4,50,4999.0000,3028.3403,1215.0000
+TRIAL_SERIES:single,5000,4,51,5001.0000,2881.2456,1230.0000
+TRIAL_SERIES:single,5000,4,52,5000.0000,2756.8832,1228.0000
+TRIAL_SERIES:single,5000,4,53,5000.0000,3065.5370,1199.5000
+TRIAL_SERIES:single,5000,4,54,4999.0000,3194.2166,1208.0000
+TRIAL_SERIES:single,5000,4,55,5000.0000,2508.9596,1219.0000
+TRIAL_SERIES:single,5000,4,56,4999.0000,2965.6919,1203.0000
+TRIAL_SERIES:single,5000,4,57,5001.0000,2926.0044,1218.0000
+TRIAL_SERIES:single,5000,4,58,5000.0000,2684.8000,1215.0000
+TRIAL_SERIES:single,5000,4,59,5000.0000,2940.6340,1234.0000
+TRIAL_SERIES:single,5000,4,60,5000.0000,2776.1544,1234.5000
+TRIAL_SERIES:single,5000,4,61,0.0000,0.0000,0.0000
+TRIAL_RESULT:single,5000,4,4999.9833,1235.0000,9728.3616,1235.0000,273697.0000
+[2026-02-28 17:58:44] Benchmark run: phase=single step=25 target=5000 duration=60s trial=5 attempt=1
+TRIAL_SERIES:single,5000,5,1,4999.0000,11874.2484,1431.0000
+TRIAL_SERIES:single,5000,5,2,5000.0000,2724.4340,1216.0000
+TRIAL_SERIES:single,5000,5,3,5000.0000,4719.8014,1250.0000
+TRIAL_SERIES:single,5000,5,4,5001.0000,4244.1444,1218.0000
+TRIAL_SERIES:single,5000,5,5,4998.0000,4405.5996,1196.0000
+TRIAL_SERIES:single,5000,5,6,5002.0000,4311.5414,1208.0000
+TRIAL_SERIES:single,5000,5,7,4999.0000,5059.6397,1217.0000
+TRIAL_SERIES:single,5000,5,8,5000.0000,3824.8762,1208.5000
+TRIAL_SERIES:single,5000,5,9,5001.0000,3533.9130,1235.0000
+TRIAL_SERIES:single,5000,5,10,5000.0000,3684.0582,1232.0000
+TRIAL_SERIES:single,5000,5,11,4998.0000,3949.3253,1228.0000
+TRIAL_SERIES:single,5000,5,12,5001.0000,3457.1014,1236.0000
+TRIAL_SERIES:single,5000,5,13,5000.0000,3466.2436,1221.5000
+TRIAL_SERIES:single,5000,5,14,5001.0000,3058.1762,1223.0000
+TRIAL_SERIES:single,5000,5,15,4999.0000,3318.5977,1211.0000
+TRIAL_SERIES:single,5000,5,16,5001.0000,3611.8052,1204.0000
+TRIAL_SERIES:single,5000,5,17,4999.0000,4125.6999,1216.0000
+TRIAL_SERIES:single,5000,5,18,5000.0000,4308.6044,1228.0000
+TRIAL_SERIES:single,5000,5,19,5000.0000,4204.0576,1239.0000
+TRIAL_SERIES:single,5000,5,20,5001.0000,3471.4789,1224.0000
+TRIAL_SERIES:single,5000,5,21,5000.0000,3226.8600,1222.0000
+TRIAL_SERIES:single,5000,5,22,4999.0000,3643.3097,1206.0000
+TRIAL_SERIES:single,5000,5,23,5001.0000,3925.0306,1204.0000
+TRIAL_SERIES:single,5000,5,24,4999.0000,3851.5879,1183.0000
+TRIAL_SERIES:single,5000,5,25,5001.0000,3303.2999,1210.0000
+TRIAL_SERIES:single,5000,5,26,5000.0000,3237.0650,1181.0000
+TRIAL_SERIES:single,5000,5,27,5000.0000,3609.4266,1202.5000
+TRIAL_SERIES:single,5000,5,28,5000.0000,3018.9140,1214.0000
+TRIAL_SERIES:single,5000,5,29,5000.0000,3419.8522,1207.0000
+TRIAL_SERIES:single,5000,5,30,4999.0000,3110.0042,1223.0000
+TRIAL_SERIES:single,5000,5,31,5001.0000,3863.8276,1215.0000
+TRIAL_SERIES:single,5000,5,32,5000.0000,3134.4322,1204.0000
+TRIAL_SERIES:single,5000,5,33,4995.0000,3353.9720,1228.0000
+TRIAL_SERIES:single,5000,5,34,5005.0000,3977.5307,1233.0000
+TRIAL_SERIES:single,5000,5,35,4999.0000,84528.4171,73012.0000
+TRIAL_SERIES:single,5000,5,36,4998.0000,114342.1531,82941.5000
+TRIAL_SERIES:single,5000,5,37,5003.0000,130628.9666,88993.0000
+TRIAL_SERIES:single,5000,5,38,4999.0000,94434.9196,53288.0000
+TRIAL_SERIES:single,5000,5,39,4998.0000,59963.6937,21359.5000
+TRIAL_SERIES:single,5000,5,40,5003.0000,38968.8195,1516.0000
+TRIAL_SERIES:single,5000,5,41,5000.0000,22042.1440,1469.5000
+TRIAL_SERIES:single,5000,5,42,5000.0000,7567.6780,1282.0000
+TRIAL_SERIES:single,5000,5,43,4997.0000,3219.1133,1228.0000
+TRIAL_SERIES:single,5000,5,44,5003.0000,3175.2830,1228.0000
+TRIAL_SERIES:single,5000,5,45,4999.0000,2913.5079,1214.0000
+TRIAL_SERIES:single,5000,5,46,5001.0000,2875.4241,1198.0000
+TRIAL_SERIES:single,5000,5,47,5000.0000,2924.0792,1230.0000
+TRIAL_SERIES:single,5000,5,48,4999.0000,3008.1748,1207.0000
+TRIAL_SERIES:single,5000,5,49,5000.0000,2741.6806,1227.0000
+TRIAL_SERIES:single,5000,5,50,5000.0000,2879.3622,1220.0000
+TRIAL_SERIES:single,5000,5,51,5001.0000,2717.4745,1221.0000
+TRIAL_SERIES:single,5000,5,52,4999.0000,2667.4485,1206.0000
+TRIAL_SERIES:single,5000,5,53,5000.0000,2751.9780,1200.0000
+TRIAL_SERIES:single,5000,5,54,5001.0000,2554.2687,1233.0000
+TRIAL_SERIES:single,5000,5,55,5000.0000,2473.2742,1206.0000
+TRIAL_SERIES:single,5000,5,56,4999.0000,2733.2128,1202.0000
+TRIAL_SERIES:single,5000,5,57,5001.0000,3237.4921,1200.0000
+TRIAL_SERIES:single,5000,5,58,4997.0000,2832.5687,1207.0000
+TRIAL_SERIES:single,5000,5,59,5003.0000,2862.6026,1230.0000
+TRIAL_SERIES:single,5000,5,60,5000.0000,2911.1624,1227.0000
+TRIAL_SERIES:single,5000,5,61,0.0000,0.0000,0.0000
+TRIAL_RESULT:single,5000,5,5000.0000,1277.0000,12299.6352,1277.0000,213187.0000
+[2026-02-28 18:01:05] Eval 1 result: target=5000 avg_thr=4967.2063 median_lat_us=1270.0000 mean_lat_us=22072.4540 p99_lat_us=245142.4000 pass=true status=ok
+[2026-02-28 18:01:05] Single-target complete: slowdown_type=network step=25 target=5000 observed_throughput=4967.2063 observed_latency_us=1270.0000
+RESULTS:4967.2063,1270.0000
+RESULTS_EXT:4967.2063,1270.0000,22072.4540,1270.0000,245142.4000
+[2026-02-28 18:01:08] Completed step 25Mbps: observed_thr=4967.2063, mean_lat_us=22072.4540, median_lat_us=1270.0000, p99_lat_us=245142.4000

@@ -1,2 +1,0 @@
-slowdown_type,step_value,step_label,latency_target_ms,max_target_throughput,observed_throughput_at_max,observed_latency_us_at_max,validated
-network_bandwidth,100,100Mbps,25,24000,24213.9337,15055.8703,true

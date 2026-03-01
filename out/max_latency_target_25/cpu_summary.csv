@@ -1,5 +1,0 @@
-slowdown_type,step_value,step_label,latency_target_ms,max_target_throughput,observed_throughput_at_max,observed_latency_us_at_max,validated
-cpu,4,4c,25,44500,45117.8451,13307.3783,true
-cpu,3,3c,25,43000,42553.2057,22168.4977,true
-cpu,2,2c,25,32500,32786.8961,7176.9505,true
-cpu,1,1c,25,31500,31746.0317,21195.9812,true

@@ -21,6 +21,19 @@ NETWORK_LATENCY_STEPS=(${NETWORK_LATENCY_STEPS:-0.25ms 0.5ms 1ms 5ms})
 MAX_TRIAL_ATTEMPTS="${MAX_TRIAL_ATTEMPTS:-3}"
 FIND_TRIALS="${FIND_TRIALS:-3}"
 VALIDATION_TRIALS="${VALIDATION_TRIALS:-5}"
+MODE_KIND="${MODE_KIND:-search}"
+PROFILE_TARGET_FACTOR="${PROFILE_TARGET_FACTOR:-0.8}"
+PROFILE_FIXED_THROUGHPUT="${PROFILE_FIXED_THROUGHPUT:-}"
+PROFILE_STEP_TARGETS="${PROFILE_STEP_TARGETS:-}"
+PROFILE_TRIALS="${PROFILE_TRIALS:-5}"
+PROFILE_RUN_DURATION="${PROFILE_RUN_DURATION:-60}"
+FLAKY_FIXED_THROUGHPUT="${FLAKY_FIXED_THROUGHPUT:-}"
+FLAKY_TRIALS="${FLAKY_TRIALS:-5}"
+FLAKY_RUN_DURATION="${FLAKY_RUN_DURATION:-60}"
+FLAKY_UNHEALTHY_CORES="${FLAKY_UNHEALTHY_CORES:-1}"
+FLAKY_HEALTHY_INTERVAL_SEC="${FLAKY_HEALTHY_INTERVAL_SEC:-30}"
+FLAKY_UNHEALTHY_INTERVAL_SEC="${FLAKY_UNHEALTHY_INTERVAL_SEC:-10}"
+FLAKY_NODE="${FLAKY_NODE:-ccl2.cyber.lab}"
 
 MIN_THROUGHPUT="${MIN_THROUGHPUT:-1}"
 INITIAL_THROUGHPUT="${INITIAL_THROUGHPUT:-32000}"
@@ -39,7 +52,7 @@ THREAD_COUNT="${THREAD_COUNT:-256}"
 FIND_RUN_DURATION="${FIND_RUN_DURATION:-30}"
 VALIDATION_RUN_DURATION="${VALIDATION_RUN_DURATION:-90}"
 RECORD_COUNT="${RECORD_COUNT:-200000}"
-OPERATION_COUNT="${OPERATION_COUNT:-2000000}"
+OPERATION_COUNT="${OPERATION_COUNT:-10000000}"
 CASS_CONNECTIONS="${CASS_CONNECTIONS:-8}"
 RESTORE_BEFORE_STEP="${RESTORE_BEFORE_STEP:-true}"
 
@@ -101,7 +114,15 @@ for latency_target in "${LATENCY_TARGETS_MS[@]}"; do
     log "==== LATENCY TARGET ${latency_target}ms -> ${target_dir} ===="
 
     for mode in "${MODES[@]}"; do
-        mapfile -t step_args < <(mode_steps "$mode")
+        if [[ "$MODE_KIND" == "cpu_flaky" ]]; then
+            if [[ "$mode" != "cpu" ]]; then
+                log "Skipping mode ${mode}: MODE_KIND=cpu_flaky only supports cpu"
+                continue
+            fi
+            step_args=("$DEFAULT_CORES")
+        else
+            mapfile -t step_args < <(mode_steps "$mode")
+        fi
         if [[ "${#step_args[@]}" -eq 0 ]]; then
             log "Skipping mode ${mode}: no steps"
             continue
@@ -116,6 +137,7 @@ for latency_target in "${LATENCY_TARGETS_MS[@]}"; do
         OUT_DIR="$target_dir" \
             LATENCY_TARGET_MS="$latency_target" \
             SLOWDOWN_TYPE="$mode" \
+            MODE_KIND="$MODE_KIND" \
             SNAPSHOT_NAME="$SNAPSHOT_NAME" \
             RESTORE_BEFORE_STEP="$RESTORE_BEFORE_STEP" \
             MAX_TRIAL_ATTEMPTS="$MAX_TRIAL_ATTEMPTS" \
@@ -126,6 +148,18 @@ for latency_target in "${LATENCY_TARGETS_MS[@]}"; do
             MAX_EVAL_POINTS="$MAX_EVAL_POINTS" \
             FIND_TRIALS="$FIND_TRIALS" \
             VALIDATION_TRIALS="$VALIDATION_TRIALS" \
+            PROFILE_TARGET_FACTOR="$PROFILE_TARGET_FACTOR" \
+            PROFILE_FIXED_THROUGHPUT="$PROFILE_FIXED_THROUGHPUT" \
+            PROFILE_STEP_TARGETS="$PROFILE_STEP_TARGETS" \
+            PROFILE_TRIALS="$PROFILE_TRIALS" \
+            PROFILE_RUN_DURATION="$PROFILE_RUN_DURATION" \
+            FLAKY_FIXED_THROUGHPUT="$FLAKY_FIXED_THROUGHPUT" \
+            FLAKY_TRIALS="$FLAKY_TRIALS" \
+            FLAKY_RUN_DURATION="$FLAKY_RUN_DURATION" \
+            FLAKY_UNHEALTHY_CORES="$FLAKY_UNHEALTHY_CORES" \
+            FLAKY_HEALTHY_INTERVAL_SEC="$FLAKY_HEALTHY_INTERVAL_SEC" \
+            FLAKY_UNHEALTHY_INTERVAL_SEC="$FLAKY_UNHEALTHY_INTERVAL_SEC" \
+            FLAKY_NODE="$FLAKY_NODE" \
             CLIENT_TYPE="$CLIENT_TYPE" \
             SILENCE="$SILENCE" \
             THREAD_COUNT="$THREAD_COUNT" \
@@ -154,19 +188,21 @@ for latency_target in "${LATENCY_TARGETS_MS[@]}"; do
 
 done
 
-for mode in "${MODES[@]}"; do
-    merged_csv="${OUT_BASE}/${mode}_throughput_vs_degradation.csv"
-    merged_png="${OUT_BASE}/${mode}_throughput_vs_degradation.png"
-    if ! python3 "$MODE_LINES_PLOT_SCRIPT" \
-        --out-base "$OUT_BASE" \
-        --mode "$mode" \
-        --output-csv "$merged_csv" \
-        --output-png "$merged_png" >/dev/null 2>&1; then
-        log "WARNING: Could not build throughput-vs-degradation plot for mode=${mode}"
-    else
-        log "Built throughput-vs-degradation plot for mode=${mode}: ${merged_png}"
-    fi
-done
+if [[ "$MODE_KIND" == "search" ]]; then
+    for mode in "${MODES[@]}"; do
+        merged_csv="${OUT_BASE}/${mode}_throughput_vs_degradation.csv"
+        merged_png="${OUT_BASE}/${mode}_throughput_vs_degradation.png"
+        if ! python3 "$MODE_LINES_PLOT_SCRIPT" \
+            --out-base "$OUT_BASE" \
+            --mode "$mode" \
+            --output-csv "$merged_csv" \
+            --output-png "$merged_png" >/dev/null 2>&1; then
+            log "WARNING: Could not build throughput-vs-degradation plot for mode=${mode}"
+        else
+            log "Built throughput-vs-degradation plot for mode=${mode}: ${merged_png}"
+        fi
+    done
+fi
 
 if [[ "${#failures[@]}" -gt 0 ]]; then
     log "Run completed with failures:"

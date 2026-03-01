@@ -1,5 +1,0 @@
-mode,latency_target_ms,step_value,step_label,observed_throughput_ops_s
-network_latency,25.0000,0.25ms,0.25ms,46880.7678
-network_latency,25.0000,0.5ms,0.5ms,44444.4518
-network_latency,25.0000,1ms,1ms,42553.1986
-network_latency,25.0000,5ms,5ms,37037.0370

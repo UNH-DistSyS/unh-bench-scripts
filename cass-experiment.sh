@@ -28,10 +28,16 @@ WORKLOAD_TARGET_WAS_SET="${WORKLOAD_TARGET+x}"
 WORKLOAD_TARGET="${WORKLOAD_TARGET:-32000}"
 THREAD_COUNT="${THREAD_COUNT:-64}"
 RUN_DURATION="${RUN_DURATION:-30}"
+SINGLE_TRIALS="${SINGLE_TRIALS:-1}"
 RECORD_COUNT="${RECORD_COUNT:-200000}"
 OPERATION_COUNT="${OPERATION_COUNT:-2000000}"
 WARMUP_QUERIES="${WARMUP_QUERIES:-5}"
 WARMUP_SLEEP_SEC="${WARMUP_SLEEP_SEC:-2}"
+CPU_FLAKY_MODE="${CPU_FLAKY_MODE:-false}"
+CPU_HEALTHY_CORES="${CPU_HEALTHY_CORES:-$DEFAULT_CORES}"
+CPU_UNHEALTHY_CORES="${CPU_UNHEALTHY_CORES:-1}"
+CPU_HEALTHY_INTERVAL_SEC="${CPU_HEALTHY_INTERVAL_SEC:-30}"
+CPU_UNHEALTHY_INTERVAL_SEC="${CPU_UNHEALTHY_INTERVAL_SEC:-10}"
 
 RUN_TAG="${RUN_TAG:-$(date +%Y%m%d_%H%M%S)_$RANDOM}"
 SLOWDOWN_NODES_CSV="${SLOWDOWN_NODES_CSV:-}"
@@ -57,6 +63,9 @@ POST_VALIDATE_CLIMB_EVALS="${POST_VALIDATE_CLIMB_EVALS:-6}"
 
 EVAL_LAST_AVG_THR="0"
 EVAL_LAST_AVG_LAT_US="0"
+EVAL_LAST_MEAN_LAT_US="0"
+EVAL_LAST_MEDIAN_LAT_US="0"
+EVAL_LAST_P99_LAT_US="0"
 EVAL_LAST_PASSED="false"
 EVAL_LAST_STATUS="ok"
 
@@ -72,6 +81,10 @@ SLOWDOWN_NODES=()
 if [[ -n "${SLOWDOWN_NODES_CSV}" ]]; then
     IFS=',' read -r -a SLOWDOWN_NODES <<< "${SLOWDOWN_NODES_CSV}"
 fi
+
+declare -a CPU_FLAKY_PIDS=()
+declare -a CPU_FLAKY_HOSTS=()
+declare -a CPU_FLAKY_CONTAINERS=()
 
 log() {
     echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*"
@@ -280,15 +293,19 @@ fi
 sudo ip link set dev "$IFB_DEV" up
 
 # Egress shaping.
-sudo tc qdisc replace dev "$IFACE" root handle 1: htb default 10
-sudo tc class replace dev "$IFACE" parent 1: classid 1:10 htb rate "${TARGET_MBIT}mbit" ceil "${TARGET_MBIT}mbit"
+# Use delete+add for better compatibility across tc/qdisc versions.
+sudo tc qdisc del dev "$IFACE" root >/dev/null 2>&1 || true
+sudo tc qdisc add dev "$IFACE" root handle 1: htb default 10 r2q 1000
+sudo tc class add dev "$IFACE" parent 1: classid 1:10 htb rate "${TARGET_MBIT}mbit" ceil "${TARGET_MBIT}mbit" quantum 1514
 
 # Ingress shaping via IFB redirection.
-sudo tc qdisc replace dev "$IFACE" ingress
-sudo tc filter replace dev "$IFACE" parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev "$IFB_DEV"
-sudo tc filter replace dev "$IFACE" parent ffff: protocol ipv6 u32 match u32 0 0 action mirred egress redirect dev "$IFB_DEV" >/dev/null 2>&1 || true
-sudo tc qdisc replace dev "$IFB_DEV" root handle 2: htb default 10
-sudo tc class replace dev "$IFB_DEV" parent 2: classid 2:10 htb rate "${TARGET_MBIT}mbit" ceil "${TARGET_MBIT}mbit"
+sudo tc qdisc del dev "$IFACE" ingress >/dev/null 2>&1 || true
+sudo tc qdisc add dev "$IFACE" ingress
+sudo tc filter add dev "$IFACE" parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev "$IFB_DEV"
+sudo tc filter add dev "$IFACE" parent ffff: protocol ipv6 u32 match u32 0 0 action mirred egress redirect dev "$IFB_DEV" >/dev/null 2>&1 || true
+sudo tc qdisc del dev "$IFB_DEV" root >/dev/null 2>&1 || true
+sudo tc qdisc add dev "$IFB_DEV" root handle 2: htb default 10 r2q 1000
+sudo tc class add dev "$IFB_DEV" parent 2: classid 2:10 htb rate "${TARGET_MBIT}mbit" ceil "${TARGET_MBIT}mbit" quantum 1514
 EOREMOTE
 }
 
@@ -396,6 +413,55 @@ remove_resource_restraints() {
     esac
 }
 
+start_cpu_flaky_loops() {
+    local systems=("${BENCH_SYSTEMS[@]}")
+    local containers=()
+    local idx
+    local host
+    local container
+
+    IFS=',' read -r -a containers <<< "$(make_container_names)"
+    CPU_FLAKY_PIDS=()
+    CPU_FLAKY_HOSTS=()
+    CPU_FLAKY_CONTAINERS=()
+
+    log "Starting CPU flaky toggles: healthy=${CPU_HEALTHY_CORES}c for ${CPU_HEALTHY_INTERVAL_SEC}s, unhealthy=${CPU_UNHEALTHY_CORES}c for ${CPU_UNHEALTHY_INTERVAL_SEC}s"
+    for idx in "${!systems[@]}"; do
+        host="${systems[$idx]}"
+        container="${containers[$idx]}"
+        if ! is_slowdown_node "$host"; then
+            continue
+        fi
+        CPU_FLAKY_HOSTS+=("$host")
+        CPU_FLAKY_CONTAINERS+=("$container")
+        (
+            while true; do
+                sleep "$CPU_HEALTHY_INTERVAL_SEC"
+                apply_core_restraints "$host" "$CPU_UNHEALTHY_CORES" "$container" || true
+                sleep "$CPU_UNHEALTHY_INTERVAL_SEC"
+                apply_core_restraints "$host" "$CPU_HEALTHY_CORES" "$container" || true
+            done
+        ) &
+        CPU_FLAKY_PIDS+=("$!")
+    done
+}
+
+stop_cpu_flaky_loops() {
+    local idx
+    for pid in "${CPU_FLAKY_PIDS[@]:-}"; do
+        kill "$pid" >/dev/null 2>&1 || true
+    done
+    for pid in "${CPU_FLAKY_PIDS[@]:-}"; do
+        wait "$pid" >/dev/null 2>&1 || true
+    done
+    for idx in "${!CPU_FLAKY_HOSTS[@]}"; do
+        apply_core_restraints "${CPU_FLAKY_HOSTS[$idx]}" "$CPU_HEALTHY_CORES" "${CPU_FLAKY_CONTAINERS[$idx]}" || true
+    done
+    CPU_FLAKY_PIDS=()
+    CPU_FLAKY_HOSTS=()
+    CPU_FLAKY_CONTAINERS=()
+}
+
 default_step_value() {
     case "$SLOWDOWN_TYPE" in
         cpu) echo "$DEFAULT_CORES" ;;
@@ -461,6 +527,10 @@ cleanup() {
     local containers
     local idx
 
+    if [[ "$CPU_FLAKY_MODE" == "true" ]]; then
+        stop_cpu_flaky_loops
+    fi
+
     IFS=',' read -r -a containers <<< "$(make_container_names)"
     for idx in "${!systems[@]}"; do
         remove_resource_restraints "${systems[$idx]}" "${containers[$idx]}"
@@ -485,7 +555,7 @@ run_benchmark() {
     log "Benchmark run: phase=${phase} step=${step_value} target=${target_throughput} duration=${run_duration}s trial=${trial} attempt=${attempt}" >&2
 
     ssh ${SSH_OPTS} "$BENCH_USER@$BENCH_HOST" \
-        "CASS_BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' CASS_SYSTEMS_LIST='$systems_list' CASS_RESULTS_DIR='$results_dir' CASS_PREFIX='$prefix' CASS_KEYSPACE='$CASS_KEYSPACE' CASS_TABLE='$CASS_TABLE' CASS_LOCAL_DC='$CASS_LOCAL_DC' CASS_CLIENT_TYPE='$CLIENT_TYPE' CASS_SILENCE='$SILENCE' CASS_WORKLOAD_TARGET='$target_throughput' CASS_THREAD_COUNT='$THREAD_COUNT' CASS_RUN_DURATION='$run_duration' CASS_RECORD_COUNT='$RECORD_COUNT' CASS_OPERATION_COUNT='$OPERATION_COUNT' CASS_CONNECTIONS='$CASS_CONNECTIONS' bash -s" <<'EOREMOTE'
+        "CASS_BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' CASS_SYSTEMS_LIST='$systems_list' CASS_RESULTS_DIR='$results_dir' CASS_PREFIX='$prefix' CASS_KEYSPACE='$CASS_KEYSPACE' CASS_TABLE='$CASS_TABLE' CASS_LOCAL_DC='$CASS_LOCAL_DC' CASS_CLIENT_TYPE='$CLIENT_TYPE' CASS_SILENCE='$SILENCE' CASS_WORKLOAD_TARGET='$target_throughput' CASS_THREAD_COUNT='$THREAD_COUNT' CASS_RUN_DURATION='$run_duration' CASS_RECORD_COUNT='$RECORD_COUNT' CASS_OPERATION_COUNT='$OPERATION_COUNT' CASS_CONNECTIONS='$CASS_CONNECTIONS' CASS_PHASE='$phase' CASS_TRIAL='$trial' bash -s" <<'EOREMOTE'
 set -euo pipefail
 
 mkdir -p "$CASS_RESULTS_DIR"
@@ -538,7 +608,7 @@ popd >/dev/null
 EOREMOTE
 
     local result_pair
-    result_pair="$(ssh ${SSH_OPTS} "$BENCH_USER@$BENCH_HOST" "CASS_BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' CASS_RESULTS_DIR='${results_dir}' CASS_PREFIX='${prefix}' bash -s" <<'EOREMOTE'
+    result_pair="$(ssh ${SSH_OPTS} "$BENCH_USER@$BENCH_HOST" "CASS_BENCH_DIR_ABSOLUTE='$BENCH_DIR_ABSOLUTE' CASS_RESULTS_DIR='${results_dir}' CASS_PREFIX='${prefix}' CASS_WORKLOAD_TARGET='$target_throughput' CASS_PHASE='$phase' CASS_TRIAL='$trial' bash -s" <<'EOREMOTE'
 set -euo pipefail
 
 shopt -s nullglob
@@ -573,9 +643,59 @@ cp "$summary_csv" "${CASS_PREFIX}.csv"
 
 avg_throughput=$(awk -F, 'NR > 1 && $2 > 0 {sum += $2; n += 1} END {if (n > 0) printf "%.4f", sum / n; else print "N/A"}' "${CASS_PREFIX}.csv")
 avg_latency=$(awk -F, 'NR > 1 && $2 > 0 && $3 > 0 {weighted += ($2 * $3); ops += $2} END {if (ops > 0) printf "%.4f", weighted / ops; else print "N/A"}' "${CASS_PREFIX}.csv")
+
+awk -F, -v phase="$CASS_PHASE" -v target="$CASS_WORKLOAD_TARGET" -v trial="$CASS_TRIAL" '
+    NR > 1 && $1 ~ /^[0-9]+$/ {
+        printf "TRIAL_SERIES:%s,%s,%s,%s,%.4f,%.4f,%.4f\n", phase, target, trial, $1, ($2 + 0), ($3 + 0), ($4 + 0) > "/dev/stderr"
+    }' "${CASS_PREFIX}.csv"
+
+latency_triplet="$(python3 - <<'PY'
+import csv
+import glob
+import math
+import os
+import statistics
+import sys
+
+results_dir = os.environ["CASS_RESULTS_DIR"]
+prefix = os.environ["CASS_PREFIX"]
+latencies = []
+
+for path in glob.glob(os.path.join(results_dir, f"{prefix}_primary_*.csv")):
+    with open(path, newline="") as fh:
+        reader = csv.reader(fh)
+        for row in reader:
+            if not row or row[0] == "Operation":
+                continue
+            if len(row) < 4:
+                continue
+            op = row[0]
+            if op.endswith("_ERROR"):
+                continue
+            try:
+                start = int(row[2])
+                end = int(row[3])
+            except ValueError:
+                continue
+            if end >= start:
+                latencies.append(end - start)
+
+if not latencies:
+    print("N/A,N/A,N/A")
+    sys.exit(0)
+
+latencies.sort()
+n = len(latencies)
+p99 = float(latencies[max(0, math.ceil(0.99 * n) - 1)])
+mean_lat = statistics.mean(latencies)
+median_lat = statistics.median(latencies)
+print(f"{mean_lat:.4f},{median_lat:.4f},{p99:.4f}")
+PY
+)"
+IFS=',' read -r mean_lat median_lat p99_lat <<< "$latency_triplet"
 popd >/dev/null
 
-echo "${avg_throughput},${avg_latency}"
+echo "${avg_throughput},${median_lat},${mean_lat},${median_lat},${p99_lat}"
 EOREMOTE
 )"
 
@@ -600,8 +720,14 @@ run_trial_once() {
     local pair
 
     pair="$(run_benchmark "$step_value" "$target_throughput" "$run_duration" "$phase" "$trial" "$attempt")"
-    IFS=',' read -r thr lat <<< "$pair"
-    if [[ -z "${thr:-}" || -z "${lat:-}" || "$thr" == "N/A" || "$lat" == "N/A" ]]; then
+    local mean_lat
+    local median_lat
+    local p99_lat
+    IFS=',' read -r thr lat mean_lat median_lat p99_lat <<< "$pair"
+    if [[ -z "${thr:-}" || -z "${lat:-}" || -z "${mean_lat:-}" || -z "${median_lat:-}" || -z "${p99_lat:-}" ]]; then
+        return 1
+    fi
+    if [[ "$thr" == "N/A" || "$lat" == "N/A" || "$mean_lat" == "N/A" || "$median_lat" == "N/A" || "$p99_lat" == "N/A" ]]; then
         return 1
     fi
     echo "$pair"
@@ -624,6 +750,12 @@ evaluate_target() {
     local median_lat="999999999"
     local -a trial_thrs=()
     local -a trial_lats=()
+    local -a trial_mean_lats=()
+    local -a trial_median_lats=()
+    local -a trial_p99_lats=()
+    local mean_lat="0"
+    local median_lat_detail="0"
+    local p99_lat="0"
 
     ((CURRENT_EVAL_INDEX += 1))
     log "Eval ${CURRENT_EVAL_INDEX}: phase=${phase} target=${target_throughput} trials=${trial_count} duration=${run_duration}s"
@@ -644,9 +776,13 @@ evaluate_target() {
             break
         fi
 
-        IFS=',' read -r thr lat <<< "$pair"
+        IFS=',' read -r thr lat mean_lat median_lat_detail p99_lat <<< "$pair"
         trial_thrs+=("$thr")
         trial_lats+=("$lat")
+        trial_mean_lats+=("$mean_lat")
+        trial_median_lats+=("$median_lat_detail")
+        trial_p99_lats+=("$p99_lat")
+        echo "TRIAL_RESULT:${phase},${target_throughput},${trial},${thr},${lat},${mean_lat},${median_lat_detail},${p99_lat}"
     done
 
     if [[ "$status" == "ok" ]] && [[ "${#trial_thrs[@]}" -gt 0 ]]; then
@@ -659,10 +795,13 @@ evaluate_target() {
 
     EVAL_LAST_AVG_THR="$avg_thr"
     EVAL_LAST_AVG_LAT_US="$median_lat"
+    EVAL_LAST_MEAN_LAT_US="$(mean_of "${trial_mean_lats[@]}")"
+    EVAL_LAST_MEDIAN_LAT_US="$(median_of "${trial_median_lats[@]}")"
+    EVAL_LAST_P99_LAT_US="$(mean_of "${trial_p99_lats[@]}")"
     EVAL_LAST_PASSED="$passed"
     EVAL_LAST_STATUS="$status"
 
-    log "Eval ${CURRENT_EVAL_INDEX} result: target=${target_throughput} avg_thr=${avg_thr} median_lat_us=${median_lat} pass=${passed} status=${status}"
+    log "Eval ${CURRENT_EVAL_INDEX} result: target=${target_throughput} avg_thr=${avg_thr} median_lat_us=${median_lat} mean_lat_us=${EVAL_LAST_MEAN_LAT_US} p99_lat_us=${EVAL_LAST_P99_LAT_US} pass=${passed} status=${status}"
 }
 
 search_highest_pass() {
@@ -786,12 +925,13 @@ refine_toward_latency_target() {
 
 run_single_target() {
     local step_value="$1"
-    evaluate_target "$step_value" "$WORKLOAD_TARGET" "single" "1" "$RUN_DURATION"
+    evaluate_target "$step_value" "$WORKLOAD_TARGET" "single" "$SINGLE_TRIALS" "$RUN_DURATION"
     if [[ "$EVAL_LAST_STATUS" != "ok" ]]; then
         die "Single-target benchmark failed at target=${WORKLOAD_TARGET}"
     fi
     log "Single-target complete: slowdown_type=${SLOWDOWN_TYPE} step=${step_value} target=${WORKLOAD_TARGET} observed_throughput=${EVAL_LAST_AVG_THR} observed_latency_us=${EVAL_LAST_AVG_LAT_US}"
     echo "RESULTS:${EVAL_LAST_AVG_THR},${EVAL_LAST_AVG_LAT_US}"
+    echo "RESULTS_EXT:${EVAL_LAST_AVG_THR},${EVAL_LAST_AVG_LAT_US},${EVAL_LAST_MEAN_LAT_US},${EVAL_LAST_MEDIAN_LAT_US},${EVAL_LAST_P99_LAT_US}"
 }
 
 validation_passes() {
@@ -886,6 +1026,20 @@ main() {
     default_value="$(default_step_value)"
     IFS=',' read -r -a containers <<< "$(make_container_names)"
 
+    if ! is_positive_int "$SINGLE_TRIALS"; then
+        die "SINGLE_TRIALS must be a positive integer"
+    fi
+    if [[ "$CPU_FLAKY_MODE" == "true" ]]; then
+        if [[ "$SLOWDOWN_TYPE" != "cpu" ]]; then
+            die "CPU_FLAKY_MODE requires SLOWDOWN_TYPE=cpu"
+        fi
+        for v in "$CPU_HEALTHY_CORES" "$CPU_UNHEALTHY_CORES" "$CPU_HEALTHY_INTERVAL_SEC" "$CPU_UNHEALTHY_INTERVAL_SEC"; do
+            if ! is_positive_int "$v"; then
+                die "CPU flaky controls must be positive integers. Bad value: $v"
+            fi
+        done
+    fi
+
     if [[ "$mode" == "search" ]]; then
         for v in "$MIN_THROUGHPUT" "$INITIAL_THROUGHPUT" "$MAX_THROUGHPUT" "$THROUGHPUT_GRANULARITY" "$MAX_EVAL_POINTS" "$FIND_TRIALS" "$VALIDATION_TRIALS" "$MAX_TRIAL_ATTEMPTS" "$FIND_RUN_DURATION" "$VALIDATION_RUN_DURATION" "$REFINE_MAX_EVALS" "$VALIDATION_BACKOFF_STEPS" "$POST_VALIDATE_CLIMB_EVALS" "$TARGET_CLOSE_TOLERANCE_US"; do
             if ! is_positive_int "$v"; then
@@ -913,6 +1067,10 @@ main() {
         apply_resource_restraints "${systems[$idx]}" "$target_value" "${containers[$idx]}"
     done
     wait_for_cluster_ready
+
+    if [[ "$CPU_FLAKY_MODE" == "true" ]]; then
+        start_cpu_flaky_loops
+    fi
 
     if [[ "$mode" == "single" ]]; then
         run_single_target "$step_value"
